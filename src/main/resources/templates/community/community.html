@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"></head>
+<body>
+<nav th:replace="fragments.html :: nav"></nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-2">
+        </div>
+        <div class="col-8">
+
+            <div th:if="${msg}" class="alert alert-primary text-center" role="alert" style="max-width: 300px; margin: 50px auto 0;">
+                <p th:text="${msg}"></p>
+            </div>
+            <div th:if="${error}" class="alert alert-danger text-center" role="alert" style="max-width: 300px; margin: 50px auto 0;">
+                <p th:text="${error}"></p>
+            </div>
+
+            <br>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="btn btn-primary rounded btn-sm" th:href="@{/community/new}">
+                    <i class="fas fa-edit" style="color: #ffffff;"></i> 글쓰기
+                </a>
+
+                <div class="d-flex justify-content-center">
+                    <form th:action="@{/community}" method="get" class="form-inline">
+                        <div class="input-group">
+                            <input type="text" name="keyword" th:value="${ph.sc.keyword}" class="form-control rounded" placeholder="검색어를 입력하세요.">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary" hidden>검색</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="d-flex">
+                    <div th:if="${ph.prev}" class="page-item">
+                        <a th:href="@{/community(page=${ph.sc.page - 1})}" class="page-link"> <i class="fa-solid fa-arrow-left fa-lg" style="color: #1f1f1f;"></i> </a>
+                    </div>
+                    <div th:if="${!ph.prev}" >
+                         <i class="fa-solid fa-arrow-left fa-lg" style="color: #d9d9d9;"></i>
+                    </div>
+
+                    <div style="width: 20px;"></div>
+
+                    <div th:if="${ph.next}" class="page-item">
+                        <a th:href="@{/community(page=${ph.sc.page + 1})}" class="page-link"><i class="fa-solid fa-arrow-right fa-lg" style="color: #1f1f1f;"></i> </a>
+                    </div>
+                    <div th:if="${!ph.next}" >
+                        <i class="fa-solid fa-arrow-right fa-lg" style="color: #d9d9d9;"></i>
+                    </div>
+
+                </div>
+            </div>
+            <br>
+            <br>
+
+            <ul class="list-group list-group-flush border-top" th:each="item : ${communityTagResultDto}">
+                <div th:text="${item.communityId}" hidden></div>
+                <li class="list-group-item border-bottom">
+                    <div style="font-weight: bold; font-size: 15px;">
+                        <svg th:data-jdenticon-value="${item.nickname}" data-jdenticon-value="user127" width="22" height="22" class="rounded-circle border bg-light"></svg>
+                        <span th:text="${item.nickname}"> 글쓴이</span>
+
+
+
+                        <span style="color: #918d8d;" th:if="${item?.modifiedAt == null}" th:with="startOfDay=${#temporals.createToday().atStartOfDay()}">
+    <span th:if="${item?.createdAt.isAfter(startOfDay)}" th:text="${#temporals.format(item?.createdAt, 'HH:mm')}"></span>
+    <span th:if="${item?.createdAt.isBefore(startOfDay)}" th:text="${#temporals.format(item?.createdAt, 'MM-dd')}"></span>
+</span>
+
+                        <span style="color: #918d8d;" th:if="${item?.modifiedAt != null}">
+    <span th:with="startOfDay=${#temporals.createToday().atStartOfDay()}">
+        <span th:if="${item?.modifiedAt.isAfter(startOfDay)}" th:text="${#temporals.format(item?.modifiedAt, 'HH:mm 수정됨')}"></span>
+        <span th:if="${item?.modifiedAt.isBefore(startOfDay)}" th:text="${#temporals.format(item?.modifiedAt, 'MM-dd HH:mm 수정됨')}"></span>
+    </span>
+</span>
+
+
+
+
+
+                    </div>
+
+                    <div style="font-weight: bold; font-size: 20px;">
+                        <a th:href="@{/article/{id}(id=${item.communityId})}" th:text="${item.title}" style="text-decoration: none; color: black;">제목</a>
+                    </div>
+
+                <div class="d-flex justify-content-between">
+                   <span>
+                            <i class="fa-solid fa-hashtag fa-lg" style="color: #918d8d;"></i>
+                        <span th:each="tag : ${#strings.arraySplit(item.tagTitle, ',')}">
+                             <a style="color: #999; font-size: 14px; text-decoration: none;" th:href="@{/community(keyword=${tag.replace('[', '').replace(']', '')})}">
+                        <span th:text="${'#' + tag.replace('[', '').replace(']', '')}"></span>
+                             </a>
+                            <span> </span>
+                        </span>
+                  </span>
+                    <div class="ml-auto">
+                        <span style="font-weight: bold;" ><i class="fas fa-eye" style="color: #918d8d;"></i> <span th:text="${item.views}">조회수</span></span>
+                        <span style="font-weight: bold;" ><i class="fas fa-comment-dots" style="color: #918d8d;"></i> <span th:text="${item.commentCount}">댓글</span></span>
+                        <span style="font-weight: bold;" ><i class="fas fa-heart" style="color: #ff6b6b;"></i> <span th:text="${item.likes != null ? item.likes : 0}">좋아요</span></span>
+                    </div>
+                </div>
+            </li>
+            </ul>
+
+            <br>
+            <br>
+
+            <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    <li th:if="${ph.showPrev}" class="page-item">
+                        <a th:href="@{/community(page=${ph.sc.page - 1})}" class="page-link">이전</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(ph.beginPage, ph.endPage)}" th:if="${i > 0}">
+                        <a class="page-link"
+                           th:classappend="${i == ph.sc.page ? 'active' : ''}"
+                           th:href="@{/community(page=${i})}" th:text="${i}"></a>
+                    </li>
+                    <li th:if="${ph.showNext}" class="page-item">
+                        <a th:href="@{/community(page=${ph.sc.page + 1})}" class="page-link">다음</a>
+                    </li>
+                </ul>
+            </div>
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+
+
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+
+</body>
+</html>

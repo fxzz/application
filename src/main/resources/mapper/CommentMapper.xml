@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.application.comment.mapper.CommentMapper">
+
+  <insert id="insertComment" parameterType="com.example.application.comment.dto.InsertCommentDto">
+    INSERT INTO comment (communityId, accountId, content)
+    VALUES (#{communityId}, #{accountId}, #{content})
+
+  </insert>
+
+  <insert id="insertReply" parameterType="com.example.application.comment.dto.InsertReplyDto">
+    INSERT INTO comment (communityId, parentCommentId, accountId, content)
+    VALUES (#{communityId}, #{parentCommentId}, #{accountId}, #{content})
+  </insert>
+
+
+  <select id="selectComment" parameterType="Long" resultMap="CommentResult">
+    SELECT co.commentId, co.parentCommentId, a.nickname, co.content, co.createdAt, co.modifiedAt
+    FROM comment co
+           INNER JOIN account a ON co.accountId = a.accountId
+    WHERE co.communityId = #{communityId}
+    ORDER BY
+      CASE
+        WHEN co.parentCommentId IS NULL THEN co.commentId
+        ELSE co.parentCommentId
+        END,
+      co.commentId
+  </select>
+
+  <resultMap id="CommentResult" type="com.example.application.comment.dto.SelectCommentDto">
+    <id property="commentId" column="commentId" />
+    <result property="parentCommentId" column="parentCommentId" />
+    <result property="nickname" column="nickname"/>
+    <result property="content" column="content"/>
+    <result property="createdAt" column="createdAt"/>
+    <result property="modifiedAt" column="modifiedAt"/>
+  </resultMap>
+
+
+  <delete id="deleteComment" parameterType="com.example.application.comment.dto.DeleteCommentDto">
+    DELETE comment
+    WHERE commentId = #{commentId} AND accountId = #{accountId}
+  </delete>
+
+</mapper>

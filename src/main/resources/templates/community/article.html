@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"></head>
+<body>
+<nav th:replace="fragments.html :: nav"></nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <br>
+            <br>
+            <ul class="list-group list-group-flush border-top">
+                <div class="d-flex justify-content-between">
+                    <div class="ml-auto" style="display: flex; align-items: center;">
+                        <div style="margin-right: 10px;">
+                            <svg th:data-jdenticon-value="${articleDto.nickname}" data-jdenticon-value="user127" width="42" height="42" class="rounded-circle border bg-light"></svg>
+                        </div>
+                        <div>
+                            <span style="font-weight: bold; font-size: 17px;" th:text="${articleDto.nickname}">글쓴이</span>
+                            <div style="display: flex; align-items: center; margin-top: 5px;">
+
+                                         <span style="color: #918d8d; font-weight: bold;" th:if="${articleDto?.modifiedAt == null}" th:with="startOfDay=${#temporals.createToday().atStartOfDay()}">
+    <span th:if="${articleDto?.createdAt.isAfter(startOfDay)}" th:text="${#temporals.format(articleDto?.createdAt, 'HH:mm')}"></span>
+    <span th:if="${articleDto?.createdAt.isBefore(startOfDay)}" th:text="${#temporals.format(articleDto?.createdAt, 'MM-dd')}"></span>
+</span>
+
+                                <span style="color: #918d8d; font-weight: bold;" th:if="${articleDto?.modifiedAt != null}">
+    <span th:with="startOfDay=${#temporals.createToday().atStartOfDay()}">
+        <span th:if="${articleDto?.modifiedAt.isAfter(startOfDay)}" th:text="${#temporals.format(articleDto?.modifiedAt, 'HH:mm 수정됨')}"></span>
+        <span th:if="${articleDto?.modifiedAt.isBefore(startOfDay)}" th:text="${#temporals.format(articleDto?.modifiedAt, 'MM-dd HH:mm 수정됨')}"></span>
+    </span>
+</span>
+
+
+
+                                <span style="font-weight: bold; margin-left: 10px;"><i class="fas fa-eye" style="color: #918d8d;"></i> <span th:text="${articleDto.views}">조회수</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ml-auto" style="display: flex; align-items: center;">
+                        <div style="margin-right: 10px;">
+                            <i class="fas fa-heart" style="color: #ff6b6b;"></i>
+                            <span id="likesCount" style="font-weight: bold;" th:text="${articleDto.likes != null ? articleDto.likes : 0}">좋아요</span>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+            <br>
+            <h1 th:text="${articleDto.title}">제목</h1>
+            <br>
+            <h4 th:utext="${articleDto.content}">타이틀</h4>
+            <br>
+            <br>
+            <br>
+            <div class="d-flex justify-content-between">
+                    <span> <i th:if="${not articleDto.tagTitle.empty}" class="fa-solid fa-hashtag fa-lg" style="color: #918d8d;"></i>
+                        <span th:each="tag : ${articleDto.tagTitle}">
+                            <a type="button" class="btn btn btn-outline-secondary"
+                               style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" th:href="@{/community(keyword=${tag})}">
+                              <span th:text="${tag}"></span>
+                                </a>
+                                  <span> </span>
+                        </span>
+                    </span>
+                <div class="ml-auto">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button id="likeDown" type="button" class="btn btn-outline-secondary"><i class="fa-regular fa-arrow-down fa-lg" style="color: #121212;"></i></button>
+                        <button type="button" class="btn btn-outline-secondary"><i class="fas fa-heart" style="color: #ff6b6b;"></i></button>
+                        <button id="likeUp" type="button" class="btn btn-outline-secondary"><i class="fa-regular fa-arrow-up fa-lg" style="color: #121212;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <ul class="list-group list-group-flush border-top d-flex">
+
+                <li class="list-group-item border-bottom" th:if="${articleDto.accountId == #authentication.principal.account.accountId}" style="display: flex; justify-content: flex-start; align-items: center;">
+                    <div>
+                        <a th:href="@{'/articles/' + ${articleDto.communityId} + '/modify'}" style="font-weight: bold;" class="btn btn-light">수정</a>
+                    </div>
+                    <div style="margin-left: 10px;">
+                        <form th:action="@{'/articles/' + ${articleDto.communityId} + '/delete'}" method="post">
+                            <button type="submit" class="btn btn-light" style="font-weight: bold;"  onclick="confirmDelete()">삭제</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+            <div>
+
+                <br>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div id="commentContainer">
+                            <form>
+                                <div class="mb-3">
+                                    <div class="d-flex">
+                                      <svg th:data-jdenticon-value="${account.nickname}" data-jdenticon-value="user127" width="42" height="42" class="rounded-circle border bg-light"></svg>
+                                        <textarea class="form-control" id="commentInput" rows="2" placeholder="댓글을 입력하세요." style="margin-left: 10px;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button id="commentSubmit" style="font-weight: bold;" class="btn btn-light">작성</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div id="comment"></div>
+
+
+                <div id="commentRep" class="card" style="display:none">
+                    <div class="card-body">
+                        <div id="commentContainerRep">
+                            <form>
+                                <div class="mb-3">
+                                    <div class="d-flex">
+                                        <svg th:data-jdenticon-value="${account.nickname}" data-jdenticon-value="user127" width="42" height="42" class="rounded-circle border bg-light"></svg>
+                                        <textarea class="form-control" id="commentRepInput" rows="2" placeholder="답글을 입력하세요." style="margin-left: 10px;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button id="commentRepSubmit" style="font-weight: bold;" class="btn btn-light">작성</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+
+            </div>
+        </div>
+
+        <div class="col-2">
+        </div>
+        <div id="communityId" th:text="${articleDto.communityId}" hidden></div>
+        <div id="accountId" th:text="${account.accountId}" hidden></div>
+    </div>
+</div>
+
+
+
+<script th:replace="fragments.html :: ajax-csrf-header"></script>
+<script type="application/javascript">
+
+
+    let showList = function (id) {
+        $.ajax({
+            type: 'GET',
+            url: '/comment/' + id + '/read',
+            success: function (result) {
+                $("#comment").html(toHtml(result.data));
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        var communityId = $('#communityId').text();
+        var accountId = $('#accountId').text();
+        showList(communityId);
+    });
+
+
+
+    $("#comment").on("click", ".replyBtn", function() {
+        // 1. replyForm을 옮기고
+        $("#commentRep").appendTo($(this).parent());
+
+        // 2. 답글을 입력할 폼을 보여주거나 숨김 처리
+        if ($("#commentRep").css("display") === "none") {
+            $("#commentRep").css("display", "block");
+        } else {
+            $("#commentRep").css("display", "none");
+        }
+    });
+
+
+
+
+
+
+    let toHtml = function (comments) {
+        let tmp = "<ul class=\"list-group-item border-bottom\">";
+
+        comments.forEach(function (comment) {
+            if (comment.parentCommentId) {
+                tmp += '<li class="list-group-item border-bottom" style="margin-left: 50px;">';
+            } else {
+                tmp += '<li class="list-group-item border-bottom">';
+            }
+            tmp += '<div class="d-flex justify-content-between">';
+            tmp += '<div class="ml-auto" style="display: flex; align-items: center;">';
+            tmp += '<div style="margin-right: 10px;">';
+            tmp += '<svg data-jdenticon-value="' + comment.nickname + '" width="42" height="42" class="rounded-circle border bg-light"></svg>';
+            tmp += '</div>';
+            tmp += '<div>';
+            tmp += '<span style="font-weight: bold; font-size: 17px;">' + comment.nickname + '</span> ';
+            tmp += '<div style="display: flex; align-items: center; ">';
+            tmp += ' <span class="up_date" style="color: #918d8d; font-size: 15px; font-weight: bold;">' + formatDate(comment.createdAt) + '</span>';
+            tmp += '</div>';
+            tmp += '</div>';
+            tmp += '</div>';
+            tmp += '</div>';
+            tmp += '<div style="font-weight: bold;">' + comment.content.replace(/\n/g, '<br>') + '</div>';
+            tmp += '<br>';
+            if (!comment.parentCommentId) {
+                tmp += '<a href="#Redirect" class="replyBtn"  style="text-decoration: none; font-size: 13px; color: black;">답글쓰기</a>';
+            }
+            tmp += ' <a href="#Redirect" class="modBtn" style="text-decoration: none; font-size: 13px; color: black;">수정</a>';
+            tmp += ' <a href="#Redirect" class="delBtn" style="text-decoration: none; font-size: 13px; color: black;">삭제</a>';
+            tmp += '<span class="commentId" data-comment-id="' + comment.commentId + '"></span>';
+            tmp += '</li>';
+            tmp += '<br>';
+
+        });
+
+        tmp += "</ul>";
+
+        return tmp;
+    }
+
+
+
+
+    function formatDate(date) {
+        var createdAt = new Date(date);
+        var currentDate = new Date();
+
+        var formattedDate = "";
+
+        if (createdAt.toDateString() === currentDate.toDateString()) {
+            formattedDate = createdAt.getHours().toString().padStart(2, '0') + ':' + createdAt.getMinutes().toString().padStart(2, '0');
+        } else {
+            formattedDate = (createdAt.getMonth() + 1).toString().padStart(2, '0') + '-' + createdAt.getDate().toString().padStart(2, '0') + ' ' + createdAt.getHours().toString().padStart(2, '0') + ':' + createdAt.getMinutes().toString().padStart(2, '0');
+        }
+
+        return formattedDate;
+    }
+
+    $('#commentRepSubmit').click(function() {
+        var communityId = $('#communityId').text();
+        var accountId = $('#accountId').text();
+        var contentRep = $('#commentRepInput').val();
+        var commentId = $(this).closest('.list-group-item').find('[data-comment-id]').data('comment-id');
+        $.ajax({
+            url: "/comment/reply",
+            type: 'POST',
+            headers: {"content-type": "application/json"},
+            data: JSON.stringify({
+                communityId: communityId,
+                accountId: accountId,
+                content: contentRep,
+                parentCommentId: commentId
+            }),
+            success: function (response) {
+                // var successMessage = response.msg;
+                // alert(successMessage);
+                showList(communityId);
+
+            },
+            error: function (xhr, status, error) {
+                var errorMessage = xhr.responseJSON.msg;
+                alert(errorMessage);
+            }
+        });
+
+        $("#commentRep").css("display", "none")
+        $("textarea[ID=commentRepInput]").val('')
+        $("#commentRep").appendTo("body"); //body안에 #replyForm를 젤 뒤로
+    });
+
+
+
+
+        $('#likeUp').click(function () {
+            var change = 1;
+            var communityId = $('#communityId').text();
+            var accountId = $('#accountId').text();
+            $.ajax({
+                url: "/likes",
+                type: 'POST',
+                headers: {"content-type": "application/json"},
+                data: JSON.stringify({
+                    communityId: communityId,
+                    accountId: accountId,
+                    change: change
+                }),
+                success: function (likesCount) {
+                    $('#likesCount').text(likesCount);
+                },
+                error: function () {
+                    alert("1번만 가능합니다.")
+                }
+            });
+        });
+
+
+        $('#likeDown').click(function () {
+
+            var change = -1;
+            var communityId = $('#communityId').text();
+            var accountId = $('#accountId').text();
+            $.ajax({
+                url: "/likes",
+                type: 'POST',
+                headers: {"content-type": "application/json"},
+                data: JSON.stringify({
+                    communityId: communityId,
+                    accountId: accountId,
+                    change: change
+                }),
+                success: function (likesCount) {
+                    $('#likesCount').text(likesCount);
+                },
+                error: function () {
+                    alert("1번만 가능합니다.")
+                }
+            });
+        });
+
+
+        $('#commentSubmit').click(function () {
+            var communityId = $('#communityId').text();
+            var accountId = $('#accountId').text();
+            var contentNew = $('#commentInput').val();
+
+            $.ajax({
+                url: "/comment/new",
+                type: 'POST',
+                headers: {"content-type": "application/json"},
+                data: JSON.stringify({
+                    communityId: communityId,
+                    accountId: accountId,
+                    content: contentNew
+                }),
+                success: function (response) {
+                    // var successMessage = response.msg;
+                    // alert(successMessage);
+                    showList(communityId);
+                },
+                error: function (xhr, status, error) {
+                    var errorMessage = xhr.responseJSON.msg;
+                    alert(errorMessage);
+                }
+            });
+        });
+
+
+
+
+
+
+
+
+</script>
+<script>
+    function confirmDelete() {
+        if (confirm("정말 삭제하시겠습니까?")) {
+            document.getElementById("deleteForm").submit();
+        }
+    }
+</script>
+</body>
+</html>

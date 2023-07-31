@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.application.account.mapper.AccountMapper">
+
+    <insert id="insertAccount" parameterType="Account">
+        INSERT INTO account (username, password, email, fullName, nickname, role, createdAt)
+        VALUES (#{username}, #{password}, #{email}, #{fullName}, #{nickname}, #{role}, #{createdAt})
+    </insert>
+
+
+    <select id="selectUsernameCount" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM account WHERE username = #{username}
+    </select>
+
+    <select id="selectEmailCount" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM account WHERE email = #{email}
+    </select>
+
+    <select id="selectNicknameCount" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM account WHERE nickname = #{nickname}
+    </select>
+
+    <select id="selectUserByUsername" parameterType="String" resultType="Account">
+        SELECT accountId, username, password, email, fullName, nickname, role, createdAt, profileImage
+        FROM account
+        WHERE username = #{username}
+    </select>
+    
+    <select id="selectUserByAccountId" parameterType="Long" resultType="com.example.application.account.dto.AccountRespDto$AccountProfileRespDto">
+        SELECT fullName, nickname
+        FROM account
+        WHERE accountId = #{accountId}
+    </select>
+
+    <update id="updateProfile" parameterType="java.util.Map">
+        UPDATE account
+        SET fullName = #{fullName},
+            nickname = #{nickname}
+        WHERE accountId = #{accountId}
+    </update>
+
+    <update id="updatePassword" parameterType="Account">
+        UPDATE account
+        SET password = #{password}
+        WHERE accountId = #{accountId}
+    </update>
+    
+
+</mapper>

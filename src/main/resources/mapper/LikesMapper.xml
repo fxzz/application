@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.application.likes.mapper.LikesMapper">
+
+
+    <insert id="insertLikes" parameterType="com.example.application.likes.dto.LikesDto">
+        INSERT INTO likes (communityId, accountId, likesCount)
+        VALUES (#{communityId}, #{accountId}, #{likesCount})
+    </insert>
+
+    <update id="upDownLikes" parameterType="com.example.application.likes.dto.UpDownDto">
+        UPDATE likes
+        SET likesCount = likesCount + #{change}
+        WHERE communityId = #{communityId} AND accountId = #{accountId}
+    </update>
+
+    <select id="SelectLikes" parameterType="Map" resultType="Long">
+        SELECT likesCount FROM likes WHERE communityId = #{communityId} AND accountId = #{accountId}
+    </select>
+
+    <select id="selectLastLikesCount" parameterType="Long" resultType="Long">
+        SELECT likesCount
+        FROM likes
+        WHERE communityId = #{communityId}
+        ORDER BY createdAt DESC
+            LIMIT 1;
+    </select>
+
+
+
+
+
+
+</mapper>

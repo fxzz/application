@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments.html :: head"></head>
+<body>
+<nav th:replace="fragments.html :: nav"></nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+
+            <form  method="post" class=" mx-auto" th:action="@{'/articles/' + ${articleModificationFormDto.communityId} + '/modify'}" th:object="${articleModificationFormDto}">
+                <div class="form-group">
+                    <label for="title">제목</label>
+                    <input id="title" th:field="*{title}" type="text" class="form-control">
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></small>
+                </div>
+                <br>
+
+                <div id="whitelist" th:text="${whitelist}" hidden></div>
+
+                <input id="tag" name="tag" hidden>
+
+                <div class="form-group">
+                    <label for="tags">태그</label>
+                    <input id="tags" name='tags'  class='form-control some_class_name' placeholder='최대 3개의 태그, 15자 이내로 입력 가능합니다.'>
+                    <small style="color: gray;">이곳에는 다른 사용자가 최근에 입력한 태그들이 표시됩니다. 트렌드를 살펴보세요!</small>
+                </div>
+                <br>
+                <div class="form-group mb-3">
+                    <label for="content">내용</label>
+                    <textarea id="content" name="content" th:attr="data-initial-value=*{content}" class="form-control" rows="10"></textarea>
+                </div>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}" ></small>
+                    <br>
+                    <br>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block" type="submit">변경</button>
+                </div>
+                </div>
+            </form>
+
+
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+
+<script src="/node_modules/summernote/dist/summernote-bs5.js"></script>
+<script th:replace="fragments.html :: ajax-csrf-header"></script>
+<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+<script type="application/javascript">
+    $(function () {
+        var initialContent = $('[name="content"]').attr('data-initial-value');
+
+        $('#content').summernote({
+            fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
+            height: 300,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline']],
+                ['para', ['ul', 'ol']],
+                ['insert', ['picture']],
+            ],
+            callbacks: {
+                onInit: function () {
+                    $('#content').summernote('code', initialContent);
+                }
+            }
+        });
+    });
+</script>
+<script type="application/javascript">
+
+    $(function () {
+        function tagRequest(url, tagTitle) {
+            $.ajax({
+                dataType: "json",
+                autocomplete: {
+                    enabled: true,
+                    rightKey: true,
+                },
+                contentType: "application/json; charset=utf-8",
+                method: "POST",
+                url: "/tag" + url,
+                data: JSON.stringify({'tagTitle': tagTitle})
+            }).done(function (data, status) {
+                console.log("${data} and status is ${status}");
+            });
+        }
+
+        function onAdd(e) {
+            tagRequest("/add", e.detail.data.value);
+            tags.push(e.detail.data.value);
+            tagsInput.value = JSON.stringify(tags);
+        }
+
+        function onRemove(e) {
+            tags = tags.filter(tag => tag !== e.detail.data.value);
+            tagsInput.value = JSON.stringify(tags);
+        }
+
+
+
+
+
+        var input = document.querySelector('input[name="tags"]'),
+            // init Tagify script on the above inputs
+            tagify = new Tagify(input, {
+                pattern: /^.{0,15}$/,
+                whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+                maxTags: 3,
+                dropdown: {
+                    maxItems: 15,           // <- mixumum allowed rendered suggestions
+                    classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
+                    enabled: 0,             // <- show suggestions on focus
+                    closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                }
+            })
+
+        tagify.on("add", onAdd);
+        tagify.on("remove", onRemove);
+
+        var tagsInput = document.getElementById("tag");
+        var tags = [];
+
+
+    });
+
+</script>
+</body>
+</html>
