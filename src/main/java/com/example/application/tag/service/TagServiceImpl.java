@@ -1,6 +1,8 @@
 package com.example.application.tag.service;
 
-import com.example.application.tag.mapper.TagMapper;
+
+import com.example.application.tag.mapper.TagReadMapper;
+import com.example.application.tag.mapper.TagWriteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,32 +14,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
 
-    private final TagMapper tagMapper;
+    private final TagWriteMapper tagWriteMapper;
+    private final TagReadMapper tagReadMapper;
 
-
-    @Override
-    public void insertTag(String tagTitle) {
-        tagMapper.insertTag(tagTitle);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public int selectTitleCount(String tagTitle) {
-        return tagMapper.selectTitleCount(tagTitle);
-    }
 
 
 
     @Override
     public void addTagIfNotExists(String tagTitle) {
         if (!isTagExists(tagTitle)) {
-            insertTag(tagTitle);
+            tagWriteMapper.insertTag(tagTitle);
         }
     }
 
     @Transactional(readOnly = true)
     public boolean isTagExists(String tagTitle) {
-        return selectTitleCount(tagTitle) > 0;
+        return tagReadMapper.selectTitleCount(tagTitle) > 0;
     }
 
 
@@ -45,11 +37,11 @@ public class TagServiceImpl implements TagService {
     @Transactional(readOnly = true)
     @Override
     public List<String> selectAllTag() {
-        return tagMapper.selectAllTag();
+        return tagReadMapper.selectAllTag();
     }
 
     @Override
     public int selectTagId(String tagTitle) {
-        return tagMapper.selectTagId(tagTitle);
+        return tagReadMapper.selectTagId(tagTitle);
     }
 }
