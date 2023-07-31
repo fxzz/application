@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.example.application.tag.mapper.TagMapper">
-
-    <insert id="insertTag" parameterType="String">
-    INSERT INTO tag (tagTitle) VALUES (#{tagTitle})
-    </insert>
+<mapper namespace="com.example.application.tag.mapper.TagReadMapper">
 
 
 
@@ -24,7 +20,7 @@
 
 
     <select id="selectTagId" parameterType="String" resultType="int">
-       SELECT tagId FROM tag
+        SELECT tagId FROM tag
         WHERE tagTitle = #{tagTitle}
     </select>
 

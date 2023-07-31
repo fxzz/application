@@ -2,6 +2,7 @@ package com.example.application;
 
 
 import com.example.application.community.dto.CommunityDto;
+import com.example.application.community.mapper.CommunityWriteMapper;
 import com.example.application.community.service.CommunityService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.stream.IntStream;
 public class TestClass  {
 
     @Autowired
-    CommunityService communityService;
+    CommunityWriteMapper communityWriteMapper;
 
     @Test
     public void testCreateData() {
@@ -25,7 +26,7 @@ public class TestClass  {
                     // 데이터 생성 로직
                     // 여기에 데이터 생성 코드를 작성합니다.
                     // 예: communityService.saveCommunity(new CommunityNewReqDto(...), accountId);
-                    communityService.insertCommunity(CommunityDto.CommunityNewDto.builder().content("FFFFFFF").title("FFFFFFFFF").accountId(3L).build());
+                    communityWriteMapper.insertCommunity(CommunityDto.CommunityNewDto.builder().content("FFFFFFF").title("FFFFFFFFF").accountId(3L).build());
                     count.incrementAndGet();
                 });
 

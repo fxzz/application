@@ -7,9 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.Map;
 
 @Mapper
-public interface LikesMapper {
-   void insertLikes(LikesDto likesDto);
-   void upDownLikes(UpDownDto upDownDto);
+public interface LikesReadMapper {
    Long SelectLikes(Map map);
    Long selectLastLikesCount(Long communityId);
 

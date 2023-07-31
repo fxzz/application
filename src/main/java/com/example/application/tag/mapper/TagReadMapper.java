@@ -5,8 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface TagMapper {
-   void insertTag(String tagTitle);
+public interface TagReadMapper {
+
    int selectTitleCount(String tagTitle);
    List<String> selectAllTag();
    int selectTagId(String tagTitle);

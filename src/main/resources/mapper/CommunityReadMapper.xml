@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.example.application.community.mapper.CommunityMapper">
+<mapper namespace="com.example.application.community.mapper.CommunityReadMapper">
 
-    <insert id="insertCommunity" parameterType="com.example.application.community.dto.CommunityDto$CommunityNewDto"
-            useGeneratedKeys="true" keyProperty="communityId" keyColumn="communityId">
-        INSERT INTO community (title, content, accountId)
-        VALUES (#{title}, #{content}, #{accountId})
-    </insert>
 
-    <insert id="insertCommunityTag" parameterType="java.util.Map">
-        INSERT INTO communityTag (communityId, tagId)
-        VALUES (#{communityId}, #{tagId})
-    </insert>
 
     <select id="searchResultCnt" parameterType="com.example.application.community.dto.SearchCondition" resultType="int">
         SELECT count(*)
@@ -63,8 +54,8 @@
             <result column="tagTitle"/>
         </collection>
     </resultMap>
-    
-    
+
+
     <select id="selectCommunityByCommunityId" parameterType="Long" resultMap="articleDtoResultMap">
         SELECT c.communityId, c.title, c.accountId, a.nickname, c.content, c.views, c.createdAt, l.likesCount as likes, t.tagTitle, c.modifiedAt
         FROM community c
@@ -99,21 +90,6 @@
         </collection>
     </resultMap>
 
-    <delete id="deleteArticle" parameterType="java.util.Map">
-            DELETE FROM community
-            WHERE communityId = #{communityId} AND accountId = #{accountId};
-    </delete>
-
-    <delete id="deleteCommunityTagsByCommunityId" parameterType="Long">
-        DELETE FROM communitytag
-        WHERE communityId = #{communityId};
-    </delete>
-
-    <update id="updateArticleView" parameterType="Long">
-        UPDATE community
-        SET views = views + 1
-        WHERE communityId = #{communityId}
-    </update>
 
 
     <select id="selectArticleUpdateByCommunityId" parameterType="Long" resultType="com.example.application.community.dto.CommunityDto$ArticleModificationFormDto">
@@ -122,12 +98,6 @@
         WHERE c.communityId = #{communityId}
     </select>
 
-    <update id="updateArticle" parameterType="com.example.application.community.dto.CommunityDto$ArticleModificationDto">
-        UPDATE community
-        SET title = #{title},
-            content = #{content},
-            modifiedAt = #{modifiedAt}
-        WHERE communityId = #{communityId}
-    </update>
+
 
 </mapper>

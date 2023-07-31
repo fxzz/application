@@ -9,6 +9,7 @@ import com.example.application.account.validator.AccountProfileValidator;
 import com.example.application.account.validator.AccountSignUpValidator;
 import com.example.application.security.UserAccount;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +24,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class AccountController {
 
     private final AccountPasswordValidator accountPasswordValidator;
@@ -30,7 +32,7 @@ public class AccountController {
     private final AccountSignUpValidator accountSignUpValidator;
     private final AccountService accountService;
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+
 
     @InitBinder("passwordChangeReqDto")
     public void passwordInitBinder(WebDataBinder webDataBinder) {

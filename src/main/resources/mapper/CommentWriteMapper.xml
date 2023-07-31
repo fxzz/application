@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.application.comment.mapper.CommentWriteMapper">
+
+    <insert id="insertComment" parameterType="com.example.application.comment.dto.InsertCommentDto">
+        INSERT INTO comment (communityId, accountId, content)
+        VALUES (#{communityId}, #{accountId}, #{content})
+
+    </insert>
+
+    <insert id="insertReply" parameterType="com.example.application.comment.dto.InsertReplyDto">
+        INSERT INTO comment (communityId, parentCommentId, accountId, content)
+        VALUES (#{communityId}, #{parentCommentId}, #{accountId}, #{content})
+    </insert>
+
+
+    <delete id="deleteComment" parameterType="com.example.application.comment.dto.DeleteCommentDto">
+        DELETE comment
+    WHERE commentId = #{commentId} AND accountId = #{accountId}
+    </delete>
+
+</mapper>
