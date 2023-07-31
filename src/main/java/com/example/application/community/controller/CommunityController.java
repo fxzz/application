@@ -9,6 +9,7 @@ import com.example.application.tag.service.TagService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,13 +26,14 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class CommunityController {
 
     private final CommunityService communityService;
     private final TagService tagService;
     private final ObjectMapper objectMapper;
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+
 
     //todo 모든 겟페이지에 모델로 로그인 보내서 프사 고정
 
@@ -52,7 +54,7 @@ public class CommunityController {
     }
 
     @PostMapping("/community/new")
-    public String communityNew(@Valid CommunityNewReqDto communityNewReqDto,BindingResult bindingResult ,@AuthenticationPrincipal UserAccount userAccount, Model model, RedirectAttributes attributes) {
+    public String communityNew(@Valid CommunityNewReqDto communityNewReqDto,BindingResult bindingResult ,@AuthenticationPrincipal UserAccount userAccount, Model model, RedirectAttributes attributes) throws JsonProcessingException {
         if (bindingResult.hasErrors()) {
             model.addAttribute("titleError", bindingResult.getFieldError("title") != null ? bindingResult.getFieldError("title").getDefaultMessage() : null);
             model.addAttribute("contentError", bindingResult.getFieldError("content") != null ? bindingResult.getFieldError("content").getDefaultMessage() : null);

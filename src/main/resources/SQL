@@ -1,0 +1,63 @@
+/*
+
+CREATE TABLE Account (
+accountId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+username VARCHAR(255) NOT NULL UNIQUE,
+password VARCHAR(255) NOT NULL,
+email VARCHAR(255) UNIQUE,
+fullName VARCHAR(255),
+nickname VARCHAR(128) UNIQUE,
+role VARCHAR(255),
+createdAt TIMESTAMP
+)
+
+
+  CREATE TABLE Comment (
+    commentId INT AUTO_INCREMENT PRIMARY KEY,
+    communityId INT,
+    parentCommentId INT,
+    accountId INT,
+    content VARCHAR(255) NOT NULL,
+    createdAt TIMESTAMP now(),
+    modifiedAt TIMESTAMP,
+    isDeleted ENUM('0', '1') DEFAULT '0',
+    FOREIGN KEY (communityId) REFERENCES Community(communityId),
+    FOREIGN KEY (parentCommentId) REFERENCES Comment(commentId),
+    FOREIGN KEY (accountId) REFERENCES Account(accountId)
+);
+
+CREATE TABLE likes (
+  likesId INT AUTO_INCREMENT NOT NULL,
+  communityId INT NOT NULL,
+  accountId INT NOT NULL,
+  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  likesCount INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (likesId),
+  UNIQUE (communityId, accountId),
+  FOREIGN KEY (communityId) REFERENCES community (communityId),
+  FOREIGN KEY (accountId) REFERENCES account (accountId)
+);
+
+CREATE TABLE tags (
+  tagId INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(50) NOT NULL
+);
+
+
+  CREATE TABLE communityTag (
+  communityTagId INT PRIMARY KEY AUTO_INCREMENT,
+  communityId INT,
+  tagId INT,
+  FOREIGN KEY (communityId) REFERENCES community (communityId),
+  FOREIGN KEY (tagId) REFERENCES tag (tagId)
+);
+
+    CREATE TABLE persistent_logins (
+    series VARCHAR(64) PRIMARY KEY,
+    username VARCHAR(64) NOT NULL,
+    token VARCHAR(64) NOT NULL,
+    last_used TIMESTAMP NOT NULL
+    );
+
+    CREATE INDEX idx_communityTag_communityId ON communityTag (communityId);
+*/

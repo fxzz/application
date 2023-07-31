@@ -4,15 +4,13 @@ import com.example.application.account.dto.AccountReqDto.*;
 import com.example.application.account.dto.AccountRespDto.*;
 import com.example.application.account.mapper.AccountReadMapper;
 import com.example.application.account.mapper.AccountWriteMapper;
-import com.example.application.domain.Account;
-import com.example.application.domain.Role;
+import com.example.application.account.dto.Account;
 import com.example.application.util.exception.PasswordMismatchException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,17 +28,10 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public void saveAccount(AccountSignUpReqDto accountSignUpReqDto) {
-      Account account = Account.builder()
-              .username(accountSignUpReqDto.getUsername())
-              .password(passwordEncoder.encode(accountSignUpReqDto.getPassword()))
-              .email(accountSignUpReqDto.getEmail())
-              .fullName(accountSignUpReqDto.getFullName())
-              .nickname(accountSignUpReqDto.getNickname())
-              .role(Role.USER)
-              .createdAt(LocalDateTime.now())
-              .build();
 
-      accountWriteMapper.insertAccount(account);
+        var account = accountSignUpReqDto.toAccount();
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        accountWriteMapper.insertAccount(account);
     }
 
 

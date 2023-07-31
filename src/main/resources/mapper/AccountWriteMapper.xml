@@ -3,7 +3,7 @@
 
 <mapper namespace="com.example.application.account.mapper.AccountWriteMapper">
 
-    <insert id="insertAccount" parameterType="Account">
+    <insert id="insertAccount" parameterType="com.example.application.account.dto.Account">
         INSERT INTO account (username, password, email, fullName, nickname, role, createdAt)
         VALUES (#{username}, #{password}, #{email}, #{fullName}, #{nickname}, #{role}, #{createdAt})
     </insert>
@@ -17,7 +17,7 @@
         WHERE accountId = #{accountId}
     </update>
 
-    <update id="updatePassword" parameterType="Account">
+    <update id="updatePassword" parameterType="com.example.application.account.dto.Account">
         UPDATE account
         SET password = #{password}
         WHERE accountId = #{accountId}

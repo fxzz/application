@@ -2,9 +2,7 @@ package com.example.application.account.service;
 
 import com.example.application.account.dto.AccountReqDto.*;
 import com.example.application.account.dto.AccountRespDto.*;
-import com.example.application.domain.Account;
-
-import java.util.Map;
+import com.example.application.account.dto.Account;
 
 public interface AccountService {
 

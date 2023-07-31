@@ -37,16 +37,12 @@ public class CommunityServiceImpl implements CommunityService {
 
 
     @Override
-    public void saveCommunity(CommunityNewReqDto communityNewReqDto, Long accountId) {
-        CommunityNewDto communityNewDto = CommunityNewDto.builder()
-                .title(communityNewReqDto.getTitle())
-                .content(communityNewReqDto.getContent())
-                .accountId(accountId)
-                .build();
+    public void saveCommunity(CommunityNewReqDto communityNewReqDto, Long accountId) throws JsonProcessingException {
+        CommunityNewDto communityNewDto = getCommunity(communityNewReqDto, accountId);
 
         communityWriteMapper.insertCommunity(communityNewDto);
 
-        try {
+
             List<String> tagList = objectMapper.readValue(communityNewReqDto.getTag(), ArrayList.class);
             for (String tag : tagList) {
               int tagId = tagService.selectTagId(tag);
@@ -55,11 +51,8 @@ public class CommunityServiceImpl implements CommunityService {
               map.put("communityId",communityNewDto.getCommunityId());
                 communityWriteMapper.insertCommunityTag(map);
             }
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-    }
 
+    }
 
 
 
@@ -117,18 +110,13 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public void modifyArticle(Integer communityId, ArticleModificationFormDto articleModificationFormDto) {
-      ArticleModificationDto articleModificationDto = ArticleModificationDto.builder()
-                                     .communityId(articleModificationFormDto.getCommunityId())
-                                     .title(articleModificationFormDto.getTitle())
-                                     .content(articleModificationFormDto.getContent())
-                                     .modifiedAt(LocalDateTime.now())
-                                     .build();
+    public void modifyArticle(Integer communityId, ArticleModificationFormDto articleModificationFormDto) throws JsonProcessingException {
+        ArticleModificationDto articleModificationDto = getArticleModificationDto(articleModificationFormDto);
 
         communityWriteMapper.deleteCommunityTagsByCommunityId(articleModificationFormDto.getCommunityId());
         updateArticle(articleModificationDto);
 
-        try {
+
             List<String> tagList = objectMapper.readValue(articleModificationFormDto.getTag(), ArrayList.class);
             for (String tag : tagList) {
                 int tagId = tagService.selectTagId(tag);
@@ -137,14 +125,31 @@ public class CommunityServiceImpl implements CommunityService {
                 map.put("communityId",communityId);
                 communityWriteMapper.insertCommunityTag(map);
             }
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
     }
+
+
 
     @Override
     public void updateArticle(ArticleModificationDto articleModificationDto) {
         communityWriteMapper.updateArticle(articleModificationDto);
     }
 
+    private CommunityNewDto getCommunity(CommunityNewReqDto communityNewReqDto, Long accountId) {
+        CommunityNewDto communityNewDto = CommunityNewDto.builder()
+                .title(communityNewReqDto.getTitle())
+                .content(communityNewReqDto.getContent())
+                .accountId(accountId)
+                .build();
+        return communityNewDto;
+    }
+
+    private ArticleModificationDto getArticleModificationDto(ArticleModificationFormDto articleModificationFormDto) {
+        ArticleModificationDto articleModificationDto = ArticleModificationDto.builder()
+                                       .communityId(articleModificationFormDto.getCommunityId())
+                                       .title(articleModificationFormDto.getTitle())
+                                       .content(articleModificationFormDto.getContent())
+                                       .modifiedAt(LocalDateTime.now())
+                                       .build();
+        return articleModificationDto;
+    }
 }

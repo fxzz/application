@@ -1,6 +1,6 @@
 package com.example.application.security;
 
-import com.example.application.domain.Account;
+import com.example.application.account.dto.Account;
 import lombok.Getter;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
