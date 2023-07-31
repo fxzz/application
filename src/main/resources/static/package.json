@@ -1,0 +1,19 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.0",
+    "@yaireo/tagify": "^4.17.8",
+    "cropper": "^4.1.0",
+    "jdenticon": "^3.2.0",
+    "jquery-cropper": "^1.0.1",
+    "summernote": "^0.8.20"
+  }
+}
