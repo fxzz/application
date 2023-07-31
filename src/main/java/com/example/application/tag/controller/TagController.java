@@ -16,7 +16,6 @@ public class TagController {
 
     private final TagService tagService;
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @PostMapping("/tag/add")
     public ResponseEntity addTag(@RequestBody TagFormDto tagFormDto) {

@@ -22,7 +22,6 @@ public class CommunityDto {
         @NotBlank(message = "내용을 입력하세요.")
         private String content;
 
-
     }
 
     @Builder

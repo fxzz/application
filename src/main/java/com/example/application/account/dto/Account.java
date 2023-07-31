@@ -1,4 +1,4 @@
-package com.example.application.domain;
+package com.example.application.account.dto;
 
 import lombok.*;
 
@@ -23,19 +23,16 @@ public class Account {
     private LocalDateTime createdAt;
     private String profileImage;
 
+    @Getter
+    @RequiredArgsConstructor
+    public enum Role {
+        ADMIN("어드민"), USER("유저");
 
+        private final String description;
+    }
 }
 
 
 /*
-CREATE TABLE Account (
-accountId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-username VARCHAR(255) NOT NULL UNIQUE,
-password VARCHAR(255) NOT NULL,
-email VARCHAR(255) UNIQUE,
-fullName VARCHAR(255),
-nickname VARCHAR(128) UNIQUE,
-role VARCHAR(255),
-createdAt TIMESTAMP
-)
+
  */

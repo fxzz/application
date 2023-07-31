@@ -17,7 +17,7 @@
         SELECT COUNT(*) FROM account WHERE nickname = #{nickname}
     </select>
 
-    <select id="selectUserByUsername" parameterType="String" resultType="Account">
+    <select id="selectUserByUsername" parameterType="String" resultType="com.example.application.account.dto.Account">
         SELECT accountId, username, password, email, fullName, nickname, role, createdAt, profileImage
         FROM account
         WHERE username = #{username}

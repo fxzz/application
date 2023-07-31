@@ -1,7 +1,7 @@
 package com.example.application.security;
 
 import com.example.application.account.service.AccountService;
-import com.example.application.domain.Account;
+import com.example.application.account.dto.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
