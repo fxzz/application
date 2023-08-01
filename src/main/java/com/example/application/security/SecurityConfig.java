@@ -11,12 +11,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import javax.sql.DataSource;
 
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;

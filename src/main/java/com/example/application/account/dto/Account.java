@@ -2,6 +2,7 @@ package com.example.application.account.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @ToString
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account {
+public class Account implements Serializable {
 
     private Long accountId;
     private String username;
@@ -32,7 +33,3 @@ public class Account {
     }
 }
 
-
-/*
-
- */
