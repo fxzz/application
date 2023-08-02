@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,10 +73,9 @@ public class CommunityServiceImpl implements CommunityService {
 
 
 
-
+    @Cacheable(value = "articleCache", key = "#communityId")
     @Override
     public ArticleDto getArticleById(Long communityId) {
-        updateArticleView(communityId);
         return communityReadMapper.selectCommunityByCommunityId(communityId);
     }
 
