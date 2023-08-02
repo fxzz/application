@@ -3,10 +3,11 @@ package com.example.application.community.dto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class CommunityDto {
+public class CommunityDto  {
 
 
     @ToString
@@ -55,7 +56,7 @@ public class CommunityDto {
     @ToString
     @Getter
     @Setter
-    public static class ArticleDto {
+    public static class ArticleDto implements Serializable{
         private Long communityId;
         private String title;
         private String content;

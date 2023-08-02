@@ -77,6 +77,7 @@ public class CommunityController {
     @GetMapping("article/{communityId}")
     public String article(@PathVariable Long communityId, Model model, @AuthenticationPrincipal UserAccount userAccount) {
               ArticleDto articleDto = communityService.getArticleById(communityId);
+              communityService.updateArticleView(communityId);
               model.addAttribute("articleDto", articleDto);
               model.addAttribute("account", userAccount.getAccount());
           //    log.debug("articleDto : {}", articleDto);
