@@ -98,6 +98,13 @@
         WHERE c.communityId = #{communityId}
     </select>
 
+    <select id="selectLikesCommunityRanking" resultType="com.example.application.community.dto.RankIngLikesDto">
+        SELECT communityId, title, createdAt, likes
+        FROM community
+        WHERE WEEK(createdAt) = WEEK(NOW())
+        ORDER BY likes DESC
+        LIMIT 5;
+    </select>
 
 
 </mapper>

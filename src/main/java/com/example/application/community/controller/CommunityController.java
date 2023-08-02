@@ -2,8 +2,10 @@ package com.example.application.community.controller;
 
 import com.example.application.community.dto.CommunityDto.*;
 import com.example.application.community.dto.PageHandler;
+import com.example.application.community.dto.RankIngLikesDto;
 import com.example.application.community.dto.SearchCondition;
 import com.example.application.community.service.CommunityService;
+import com.example.application.community.service.RankingService;
 import com.example.application.security.UserAccount;
 import com.example.application.tag.service.TagService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,6 +34,7 @@ public class CommunityController {
     private final CommunityService communityService;
     private final TagService tagService;
     private final ObjectMapper objectMapper;
+    private final RankingService rankingService;
 
 
 
@@ -44,6 +47,10 @@ public class CommunityController {
         model.addAttribute("communityTagResultDto", communityTagResultDto);
         model.addAttribute("ph", ph);
         log.debug("communityTagResultDto : {}", communityTagResultDto);
+
+
+        List<RankIngLikesDto> rankIngLikesDtoList = rankingService.getTopLikesRank(5);
+        model.addAttribute("rankIngLikesDtoList", rankIngLikesDtoList);
         return "community/community";
     }
 

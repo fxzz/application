@@ -11,6 +11,21 @@ role VARCHAR(255),
 createdAt TIMESTAMP
 )
 
+CREATE TABLE community (
+  communityId INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  accountId INT NOT NULL,
+  views INT DEFAULT 0,
+  commentCount INT DEFAULT 0,
+  createdAt timestamp NOT NULL now(),
+  likes INT DEFAULT 0,
+  FOREIGN KEY (accountId) REFERENCES account (accountId)
+);
+
+
+
+
 
   CREATE TABLE Comment (
     commentId INT AUTO_INCREMENT PRIMARY KEY,
@@ -60,4 +75,5 @@ CREATE TABLE tags (
     );
 
     CREATE INDEX idx_communityTag_communityId ON communityTag (communityId);
+
 */
