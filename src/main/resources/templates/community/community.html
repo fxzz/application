@@ -19,7 +19,22 @@
                 <p th:text="${error}"></p>
             </div>
 
+
+
+            <p>인기 게시글 *일주일 단위*</p>
+            <table>
+                <tr th:each="rankIngLikesDto, row : ${rankIngLikesDtoList}">
+                    <td th:text="${row.count}"></td>
+                    <td>
+                        <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDto.communityId})}" th:text="${rankIngLikesDto.title}"></a>
+                    </td>
+                </tr>
+            </table>
+
+
+
             <br>
+
 
             <div class="d-flex justify-content-between align-items-center">
                 <a class="btn btn-primary rounded btn-sm" th:href="@{/community/new}">

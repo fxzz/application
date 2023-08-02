@@ -46,4 +46,10 @@
         WHERE communityId = #{communityId}
     </update>
 
+    <update id="updateLikes" parameterType="Map">
+        UPDATE community
+        SET likes = #{likes}
+        WHERE communityId = #{communityId}
+    </update>
+
 </mapper>
