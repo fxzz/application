@@ -1,5 +1,6 @@
 package com.example.application.comment.controller;
 
+import com.example.application.comment.dto.DeleteCommentDto;
 import com.example.application.comment.dto.InsertCommentDto;
 import com.example.application.comment.dto.InsertReplyDto;
 import com.example.application.comment.dto.SelectCommentDto;
@@ -9,6 +10,7 @@ import com.example.application.util.ErrorCode;
 import com.example.application.util.ResponseDto;
 import com.example.application.util.ValidationMessageUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class CommentController {
 
     private final CommentService commentService;
@@ -39,6 +42,7 @@ public class CommentController {
     @GetMapping("/comment/{communityId}/read")
     public ResponseEntity<ResponseDto<List<SelectCommentDto>>> commentRead(@PathVariable Long communityId) {
         List<SelectCommentDto> selectCommentDto = commentService.readComment(communityId);
+        log.info("selectCommentDto {}", selectCommentDto);
         return new ResponseEntity<>(new ResponseDto<>(ErrorCode.SUCCESS, CommentConstants.EMPTY_STRING, selectCommentDto), HttpStatus.OK);
     }
 
@@ -50,5 +54,11 @@ public class CommentController {
         }
         commentService.createReplayComment(insertReplyDto, userAccount);
         return new ResponseEntity<>(new ResponseDto<>(ErrorCode.SUCCESS, CommentConstants.REPLY_CREATED_MESSAGE, null), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/comment/{commentId}/remove")
+    public ResponseEntity<?> commentRemove(@PathVariable Long commentId, @AuthenticationPrincipal UserAccount userAccount) {
+        commentService.removeComment(new DeleteCommentDto(commentId, userAccount.getAccount().getAccountId()));
+        return new ResponseEntity<>(new ResponseDto<>(ErrorCode.SUCCESS, CommentConstants.COMMENT_DELETED_MESSAGE, null), HttpStatus.OK);
     }
 }

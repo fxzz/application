@@ -15,9 +15,14 @@
     </insert>
 
 
-    <delete id="deleteComment" parameterType="com.example.application.comment.dto.DeleteCommentDto">
-        DELETE comment
-    WHERE commentId = #{commentId} AND accountId = #{accountId}
-    </delete>
+    <update id="deleteComment" parameterType="com.example.application.comment.dto.DeleteCommentDto">
+        UPDATE comment
+        SET deleted = 1
+        WHERE commentId = #{commentId} AND accountId = #{accountId}
+    </update>
+
+
+
+
 
 </mapper>

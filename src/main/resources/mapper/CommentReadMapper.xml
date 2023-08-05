@@ -6,7 +6,7 @@
 
 
     <select id="selectComment" parameterType="Long" resultMap="CommentResult">
-        SELECT co.commentId, co.parentCommentId, a.nickname, co.content, co.createdAt, co.modifiedAt
+        SELECT co.commentId, co.parentCommentId, a.nickname, co.content, co.createdAt, co.modifiedAt, co.deleted
         FROM comment co
                  INNER JOIN account a ON co.accountId = a.accountId
         WHERE co.communityId = #{communityId}
@@ -25,6 +25,7 @@
         <result property="content" column="content"/>
         <result property="createdAt" column="createdAt"/>
         <result property="modifiedAt" column="modifiedAt"/>
+        <result property="deleted" column="deleted"/>
     </resultMap>
 
 

@@ -20,6 +20,7 @@ CREATE TABLE community (
   commentCount INT DEFAULT 0,
   createdAt timestamp NOT NULL now(),
   likes INT DEFAULT 0,
+  deleted VARCHAR(45),
   FOREIGN KEY (accountId) REFERENCES account (accountId)
 );
 
@@ -35,7 +36,7 @@ CREATE TABLE community (
     content VARCHAR(255) NOT NULL,
     createdAt TIMESTAMP now(),
     modifiedAt TIMESTAMP,
-    isDeleted ENUM('0', '1') DEFAULT '0',
+    deleted VARCHAR(45),
     FOREIGN KEY (communityId) REFERENCES Community(communityId),
     FOREIGN KEY (parentCommentId) REFERENCES Comment(commentId),
     FOREIGN KEY (accountId) REFERENCES Account(accountId)
@@ -76,4 +77,26 @@ CREATE TABLE tags (
 
     CREATE INDEX idx_communityTag_communityId ON communityTag (communityId);
 
+
+
+CREATE TABLE comment_report_history (
+  reportId INT AUTO_INCREMENT PRIMARY KEY,
+  accountId INT NOT NULL,
+  commentId INT NOT NULL,
+  reportedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (accountId) REFERENCES account (accountId),
+  FOREIGN KEY (commentId) REFERENCES comment (commentId),
+  UNIQUE (accountId, commentId)
+);
+
+
+CREATE TABLE community_report_history (
+  reportId INT AUTO_INCREMENT PRIMARY KEY,
+  accountId INT NOT NULL,
+  communityId INT NOT NULL,
+  reportedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (accountId) REFERENCES account (accountId),
+  FOREIGN KEY (communityId) REFERENCES community (communityId),
+  UNIQUE (accountId, communityId)
+);
 */
