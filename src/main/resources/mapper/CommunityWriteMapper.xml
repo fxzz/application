@@ -15,10 +15,11 @@
     </insert>
 
 
-    <delete id="deleteArticle" parameterType="java.util.Map">
-        DELETE FROM community
+    <update id="deleteArticle" parameterType="java.util.Map">
+        UPDATE community
+        SET deleted = 1
         WHERE communityId = #{communityId} AND accountId = #{accountId};
-    </delete>
+    </update>
 
     <delete id="deleteCommunityTagsByCommunityId" parameterType="Long">
         DELETE FROM communitytag
@@ -49,6 +50,12 @@
     <update id="updateLikes" parameterType="Map">
         UPDATE community
         SET likes = #{likes}
+        WHERE communityId = #{communityId}
+    </update>
+
+    <update id="updateCommentCnt" parameterType="Long">
+        UPDATE community
+        SET commentCount = commentCount + 1
         WHERE communityId = #{communityId}
     </update>
 

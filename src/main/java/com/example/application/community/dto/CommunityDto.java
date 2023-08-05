@@ -50,6 +50,7 @@ public class CommunityDto  {
        private Long likes;
        private List<String> tagTitle;
        private LocalDateTime modifiedAt;
+       private String deleted;
 
     }
 

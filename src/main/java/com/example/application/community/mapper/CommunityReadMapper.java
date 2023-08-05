@@ -9,7 +9,6 @@ import java.util.List;
 
 @Mapper
 public interface CommunityReadMapper {
-
     ArticleModificationFormDto selectArticleUpdateByCommunityId(Long communityId);
     int searchResultCnt(SearchCondition searchCondition);
     ArticleDto selectCommunityByCommunityId(Long communityId);

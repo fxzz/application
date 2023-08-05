@@ -17,5 +17,6 @@ public interface CommunityWriteMapper {
    void updateArticleView(Long communityId);
    void updateArticle(ArticleModificationDto articleModificationDto);
    void updateLikes(Map map);
+   void updateCommentCnt(Long communityId);
 
 }
