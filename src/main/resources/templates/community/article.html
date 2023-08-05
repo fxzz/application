@@ -19,7 +19,7 @@
                             <svg th:data-jdenticon-value="${articleDto.nickname}" data-jdenticon-value="user127" width="42" height="42" class="rounded-circle border bg-light"></svg>
                         </div>
                         <div>
-                            <span style="font-weight: bold; font-size: 17px;" th:text="${articleDto.nickname}">글쓴이</span>
+                            <span style="font-weight: bold; font-size: 17px;" th:text="${articleDto.nickname}">글쓴이</span> <span><a id="communityReportBtn" style="cursor: pointer;"><i class="fas fa-exclamation-triangle fa-lg" style="color: #f3311b;"></i></a></span>
                             <div style="display: flex; align-items: center; margin-top: 5px;">
 
                                          <span style="color: #918d8d; font-weight: bold;" th:if="${articleDto?.modifiedAt == null}" th:with="startOfDay=${#temporals.createToday().atStartOfDay()}">
@@ -203,29 +203,34 @@
             } else {
                 tmp += '<li class="list-group-item border-bottom">';
             }
-            tmp += '<div class="d-flex justify-content-between">';
-            tmp += '<div class="ml-auto" style="display: flex; align-items: center;">';
-            tmp += '<div style="margin-right: 10px;">';
-            tmp += '<svg data-jdenticon-value="' + comment.nickname + '" width="42" height="42" class="rounded-circle border bg-light"></svg>';
-            tmp += '</div>';
-            tmp += '<div>';
-            tmp += '<span style="font-weight: bold; font-size: 17px;">' + comment.nickname + '</span> ';
-            tmp += '<div style="display: flex; align-items: center; ">';
-            tmp += ' <span class="up_date" style="color: #918d8d; font-size: 15px; font-weight: bold;">' + formatDate(comment.createdAt) + '</span>';
-            tmp += '</div>';
-            tmp += '</div>';
-            tmp += '</div>';
-            tmp += '</div>';
-            tmp += '<div style="font-weight: bold;">' + comment.content.replace(/\n/g, '<br>') + '</div>';
-            tmp += '<br>';
-            if (!comment.parentCommentId) {
-                tmp += '<a href="#Redirect" class="replyBtn"  style="text-decoration: none; font-size: 13px; color: black;">답글쓰기</a>';
+                tmp += '<div class="d-flex justify-content-between">';
+                tmp += '<div class="ml-auto" style="display: flex; align-items: center;">';
+                tmp += '<div style="margin-right: 10px;">';
+                tmp += '<svg data-jdenticon-value="' + comment.nickname + '" width="42" height="42" class="rounded-circle border bg-light"></svg>';
+                tmp += '</div>';
+                tmp += '<div>';
+                tmp += '<span style="font-weight: bold; font-size: 17px;">' + comment.nickname + '</span> ';
+                tmp += '<div style="display: flex; align-items: center; ">';
+                tmp += ' <span class="up_date" style="color: #918d8d; font-size: 15px; font-weight: bold;">' + formatDate(comment.createdAt) + '</span>';
+                tmp += '</div>';
+                tmp += '</div>';
+                tmp += '</div>';
+                tmp += '</div>';
+            if (comment.deleted == 1) {
+                tmp += '<div style="text-decoration: line-through;">'+"삭제된 댓글 입니다."+'</div>';
+            } else {
+                tmp += '<div style="font-weight: bold;">' + comment.content.replace(/\n/g, '<br>') + '</div>';
+
             }
-            tmp += ' <a href="#Redirect" class="modBtn" style="text-decoration: none; font-size: 13px; color: black;">수정</a>';
-            tmp += ' <a href="#Redirect" class="delBtn" style="text-decoration: none; font-size: 13px; color: black;">삭제</a>';
-            tmp += '<span class="commentId" data-comment-id="' + comment.commentId + '"></span>';
-            tmp += '</li>';
-            tmp += '<br>';
+                tmp += '<br>';
+            if (!comment.parentCommentId) {
+                    tmp += '<a href="#Redirect" class="replyBtn"  style="text-decoration: none; font-size: 13px; color: black;">답글</a>';
+                }
+                tmp += ' <a href="#Redirect"  class="delBtn" style="text-decoration: none; font-size: 13px; color: black;">삭제</a>';
+                 tmp += ' <a href="#Redirect" class="repBtn" style="text-decoration: none; font-size: 13px; color: black;">신고</a>';
+                tmp += '<span class="commentId" data-comment-id="' + comment.commentId + '"></span>';
+                tmp += '</li>';
+                tmp += '<br>';
 
         });
 
@@ -361,8 +366,87 @@
         });
 
 
+    $('#comment').on('click', '.delBtn', function() {
+        if (!confirm("정말 삭제 하시겠습니까?")) {
+            return ;
+        }
+
+        var commentId = $(this).siblings('.commentId').data('comment-id');
+        var communityId = $('#communityId').text();
 
 
+        $.ajax({
+            url: "/comment/" + commentId + "/remove",
+            type: 'POST',
+            headers: {"content-type": "application/json"},
+            data: JSON.stringify({
+                commentId: commentId
+            }),
+            success: function (response) {
+                // var successMessage = response.msg;
+                // alert(successMessage);
+                showList(communityId);
+            },
+            error: function (xhr, status, error) {
+                var errorMessage = xhr.responseJSON.msg;
+                alert(errorMessage);
+            }
+        });
+    });
+
+
+    $('#communityReportBtn').click(function () {
+        if (!confirm("정말 신고 하시겠습니까?")) {
+            return;
+        }
+        var communityId = $('#communityId').text();
+
+        $.ajax({
+            url: "/report/community/" + communityId,
+            type: 'POST',
+            headers: {"content-type": "application/json"},
+            data: JSON.stringify({
+                communityId: communityId
+            }),
+            success: function (response) {
+                // var successMessage = response.msg;
+                // alert(successMessage);
+                showList(communityId);
+                alert("신고를 성공적으로 완료 했습니다.")
+            },
+            error: function (xhr, status, error) {
+                alert("이미 신고한 게시글 입니다.");
+            }
+        });
+
+    });
+
+    $('#comment').on('click', '.repBtn', function() {
+        if (!confirm("정말 신고 하시겠습니까??")) {
+            return ;
+        }
+
+        var commentId = $(this).siblings('.commentId').data('comment-id');
+        var communityId = $('#communityId').text();
+
+        $.ajax({
+            url: "/report/comment/" + commentId,
+            type: 'POST',
+            headers: {"content-type": "application/json"},
+            data: JSON.stringify({
+                commentId: commentId
+            }),
+            success: function (response) {
+                // var successMessage = response.msg;
+                // alert(successMessage);
+                showList(communityId);
+                alert("신고를 성공적으로 완료 했습니다.")
+            },
+            error: function (xhr, status, error) {
+                alert("이미 신고한 게시글 입니다.");
+            }
+        });
+    });
 
 
 
