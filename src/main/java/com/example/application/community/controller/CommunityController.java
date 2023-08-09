@@ -2,18 +2,14 @@ package com.example.application.community.controller;
 
 import com.example.application.community.dto.CommunityDto.*;
 import com.example.application.community.dto.PageHandler;
-import com.example.application.community.dto.RankIngLikesDto;
 import com.example.application.community.dto.SearchCondition;
 import com.example.application.community.service.CommunityService;
-import com.example.application.community.service.RankingService;
 import com.example.application.security.UserAccount;
 import com.example.application.tag.service.TagService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +30,7 @@ public class CommunityController {
     private final CommunityService communityService;
     private final TagService tagService;
     private final ObjectMapper objectMapper;
-    private final RankingService rankingService;
+
 
 
 
@@ -49,8 +45,6 @@ public class CommunityController {
         log.debug("communityTagResultDto : {}", communityTagResultDto);
 
 
-        List<RankIngLikesDto> rankIngLikesDtoList = rankingService.getTopLikesRank(5);
-        model.addAttribute("rankIngLikesDtoList", rankIngLikesDtoList);
         return "community/community";
     }
 

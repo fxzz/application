@@ -57,7 +57,7 @@ public class CommunityDto  {
     @ToString
     @Getter
     @Setter
-    public static class ArticleDto implements Serializable{
+    public static class ArticleDto {
         private Long communityId;
         private String title;
         private String content;
