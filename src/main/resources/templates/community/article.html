@@ -2,6 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head th:replace="fragments.html :: head"></head>
 <body>
 <nav th:replace="fragments.html :: nav"></nav>
@@ -67,9 +68,7 @@
                     </span>
                 <div class="ml-auto">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button id="likeDown" type="button" class="btn btn-outline-secondary"><i class="fa-regular fa-arrow-down fa-lg" style="color: #121212;"></i></button>
-                        <button type="button" class="btn btn-outline-secondary"><i class="fas fa-heart" style="color: #ff6b6b;"></i></button>
-                        <button id="likeUp" type="button" class="btn btn-outline-secondary"><i class="fa-regular fa-arrow-up fa-lg" style="color: #121212;"></i></button>
+                        <button id="likeUp" type="button" class="btn btn-outline-secondary"><i class="fas fa-heart" style="color: #ff6b6b;"></i></button>
                     </div>
                 </div>
             </div>
@@ -293,7 +292,6 @@
 
 
         $('#likeUp').click(function () {
-            var change = 1;
             var communityId = $('#communityId').text();
             var accountId = $('#accountId').text();
             $.ajax({
@@ -303,10 +301,12 @@
                 data: JSON.stringify({
                     communityId: communityId,
                     accountId: accountId,
-                    change: change
                 }),
-                success: function (likesCount) {
-                    $('#likesCount').text(likesCount);
+                success: function () {
+                    var likesCountElement = $('#likesCount');
+                    var currentLikes = parseInt(likesCountElement.text());
+                    likesCountElement.text(currentLikes + 1);
+                    alert("좋아요를 눌렀습니다.")
                 },
                 error: function () {
                     alert("1번만 가능합니다.")
@@ -315,28 +315,7 @@
         });
 
 
-        $('#likeDown').click(function () {
 
-            var change = -1;
-            var communityId = $('#communityId').text();
-            var accountId = $('#accountId').text();
-            $.ajax({
-                url: "/likes",
-                type: 'POST',
-                headers: {"content-type": "application/json"},
-                data: JSON.stringify({
-                    communityId: communityId,
-                    accountId: accountId,
-                    change: change
-                }),
-                success: function (likesCount) {
-                    $('#likesCount').text(likesCount);
-                },
-                error: function () {
-                    alert("1번만 가능합니다.")
-                }
-            });
-        });
 
 
         $('#commentSubmit').click(function () {

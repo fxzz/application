@@ -12,6 +12,4 @@ import java.time.LocalDateTime;
 public class LikesDto {
     private Long communityId;
     private Long accountId;
-    private Long likesCount;
-    private Long change;
 }

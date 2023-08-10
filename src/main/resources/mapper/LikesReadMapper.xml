@@ -5,17 +5,10 @@
 
 
 
-
-    <select id="SelectLikes" parameterType="Map" resultType="Long">
-        SELECT likesCount FROM likes WHERE communityId = #{communityId} AND accountId = #{accountId}
-    </select>
-
-    <select id="selectLastLikesCount" parameterType="Long" resultType="Long">
-        SELECT likesCount
+    <select id="selectLikesCount" parameterType="Long" resultType="Long">
+        SELECT count(*)
         FROM likes
         WHERE communityId = #{communityId}
-        ORDER BY createdAt DESC
-            LIMIT 1;
     </select>
 
 

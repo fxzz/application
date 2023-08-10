@@ -9,6 +9,7 @@ fullName VARCHAR(255),
 nickname VARCHAR(128) UNIQUE,
 role VARCHAR(255),
 createdAt TIMESTAMP
+프로필이미지
 )
 
 CREATE TABLE community (
@@ -99,4 +100,107 @@ CREATE TABLE community_report_history (
   FOREIGN KEY (communityId) REFERENCES community (communityId),
   UNIQUE (accountId, communityId)
 );
+
+
+
+
+
+ㅡㅡㅡ
+
+
+CREATE TABLE Account (
+    accountId SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE,
+    fullName VARCHAR(255),
+    nickname VARCHAR(128) UNIQUE,
+    role VARCHAR(255),
+    createdAt TIMESTAMP
+    프로필이미지
+);
+
+CREATE TABLE Community (
+    communityId SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    accountId INT NOT NULL,
+    views INT DEFAULT 0,
+    commentCount INT DEFAULT 0,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    likes INT DEFAULT 0,
+    deleted VARCHAR(45),
+    FOREIGN KEY (accountId) REFERENCES Account(accountId)
+);
+
+CREATE TABLE Comment (
+    commentId SERIAL PRIMARY KEY,
+    communityId INT,
+    parentCommentId INT,
+    accountId INT,
+    content VARCHAR(255) NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modifiedAt TIMESTAMP,
+    deleted VARCHAR(45),
+    FOREIGN KEY (communityId) REFERENCES Community(communityId),
+    FOREIGN KEY (parentCommentId) REFERENCES Comment(commentId),
+    FOREIGN KEY (accountId) REFERENCES Account(accountId)
+);
+
+CREATE TABLE Likes (
+    likesId SERIAL PRIMARY KEY,
+    communityId INT NOT NULL,
+    accountId INT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    likesCount INT NOT NULL DEFAULT 0,
+    UNIQUE (communityId, accountId),
+    FOREIGN KEY (communityId) REFERENCES Community(communityId),
+    FOREIGN KEY (accountId) REFERENCES Account(accountId)
+);
+
+CREATE TABLE Tags (
+    tagId SERIAL PRIMARY KEY,
+    title VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE CommunityTag (
+    communityTagId SERIAL PRIMARY KEY,
+    communityId INT,
+    tagId INT,
+    FOREIGN KEY (communityId) REFERENCES Community(communityId),
+    FOREIGN KEY (tagId) REFERENCES Tags(tagId)
+);
+
+CREATE TABLE persistent_logins (
+    series VARCHAR(64) PRIMARY KEY,
+    username VARCHAR(64) NOT NULL,
+    token VARCHAR(64) NOT NULL,
+    last_used TIMESTAMP NOT NULL
+);
+
+CREATE TABLE comment_report_history (
+    reportId SERIAL PRIMARY KEY,
+    accountId INT NOT NULL,
+    commentId INT NOT NULL,
+    reportedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (accountId) REFERENCES Account(accountId),
+    FOREIGN KEY (commentId) REFERENCES Comment(commentId),
+    UNIQUE (accountId, commentId)
+);
+
+CREATE TABLE community_report_history (
+    reportId SERIAL PRIMARY KEY,
+    accountId INT NOT NULL,
+    communityId INT NOT NULL,
+    reportedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (accountId) REFERENCES Account(accountId),
+    FOREIGN KEY (communityId) REFERENCES Community(communityId),
+    UNIQUE (accountId, communityId)
+);
+
+CREATE INDEX idx_communityTag_communityId ON communityTag (communityId);
+
+
+
+
 */
