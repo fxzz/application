@@ -12,8 +12,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +36,7 @@ public class CommunityController {
 
 
 
+
     //todo 모든 겟페이지에 모델로 로그인 보내서 프사 고정
 
     @GetMapping("/community")
@@ -48,9 +47,9 @@ public class CommunityController {
         model.addAttribute("ph", ph);
         log.debug("communityTagResultDto : {}", communityTagResultDto);
 
-
-        List<RankIngLikesDto> rankIngLikesDtoList = rankingService.getTopLikesRank(5);
+        List<RankIngLikesDto> rankIngLikesDtoList = rankingService.getTopLikesRank(10);
         model.addAttribute("rankIngLikesDtoList", rankIngLikesDtoList);
+        rankingService.setRankIngLikesDtoList(rankIngLikesDtoList);
         return "community/community";
     }
 
@@ -81,6 +80,9 @@ public class CommunityController {
               model.addAttribute("articleDto", articleDto);
               model.addAttribute("account", userAccount.getAccount());
           //    log.debug("articleDto : {}", articleDto);
+
+        List<RankIngLikesDto> rankIngLikesDtoList = rankingService.getRankIngLikesDtoList();
+        model.addAttribute("rankIngLikesDtoList", rankIngLikesDtoList);
         return "community/article";
     }
 

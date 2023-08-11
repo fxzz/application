@@ -2,9 +2,10 @@ package com.example.application.community.service;
 
 import com.example.application.community.dto.RankIngLikesDto;
 import com.example.application.community.mapper.CommunityReadMapper;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,15 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RankingService {
 
+    @Setter
+    @Getter
+    private List<RankIngLikesDto> rankIngLikesDtoList;
+
     private final CommunityReadMapper communityReadMapper;
     private final StringRedisTemplate redisTemplate;
 
     private static final String RANKING_KEY = "likes_ranking";
-    private static final long TIMEOUT_IN_SECONDS = 3600;
+    private static final long TIMEOUT_IN_SECONDS = 3600; //3600 1시간
 
     // 캐시 데이터가 있는 경우 레디스에서 조회하여 반환
     public List<RankIngLikesDto> getTopLikesRank(int limit) {
@@ -65,19 +70,22 @@ public class RankingService {
 
     // 업데이트 메서드
     public void updateLikesRanking() {
-        List<RankIngLikesDto> rankIngLikesDtoList = communityReadMapper.selectLikesCommunityRanking();
+        List<RankIngLikesDto> rankIngLikesDtoList = communityReadMapper.selectCommunityLikesRanking();
         for (RankIngLikesDto rankIngLikesDto : rankIngLikesDtoList) {
             Long communityId = rankIngLikesDto.getCommunityId();
-            Long likes = rankIngLikesDto.getLikes();
+            Long likes = rankIngLikesDto.getLikes() + 1L;
             String title = rankIngLikesDto.getTitle();
 
-            String value = communityId + "_" + title;
-            log.info("rankIngLikesDto {}", rankIngLikesDto);
 
-            redisTemplate.opsForZSet().add(RANKING_KEY, value, likes);
+            for (int i = 0; i < likes; i++) {
+                String value = communityId + "_" + title;
+                log.info("rankIngLikesDto {}", rankIngLikesDto);
 
-            // 캐시 만료 시간 설정
-            redisTemplate.expire(RANKING_KEY, TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
+                redisTemplate.opsForZSet().add(RANKING_KEY, value, likes - i); // 중복을 포함한 값으로 추가
+
+                // 캐시 만료 시간 설정
+                redisTemplate.expire(RANKING_KEY, TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
+            }
         }
     }
 }

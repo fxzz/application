@@ -4,9 +4,10 @@
 <mapper namespace="com.example.application.community.mapper.CommunityWriteMapper">
 
     <insert id="insertCommunity" parameterType="com.example.application.community.dto.CommunityDto$CommunityNewDto"
-            useGeneratedKeys="true" keyProperty="communityId" keyColumn="communityId">
-        INSERT INTO community (title, content, accountId)
-        VALUES (#{title}, #{content}, #{accountId})
+         useGeneratedKeys="true" keyProperty="communityId" keyColumn="">
+         INSERT INTO community (title, content, accountid)
+         VALUES (#{title}, #{content}, #{accountId})
+         RETURNING communityId
     </insert>
 
     <insert id="insertCommunityTag" parameterType="java.util.Map">

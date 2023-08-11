@@ -73,7 +73,7 @@ public class CommunityServiceImpl implements CommunityService {
 
 
 
-    @Cacheable(value = "articleCache", key = "#communityId")
+
     @Override
     public ArticleDto getArticleById(Long communityId) {
         return communityReadMapper.selectCommunityByCommunityId(communityId);

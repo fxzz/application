@@ -56,7 +56,55 @@
     </style>
 </head>
 
+<div class="d-flex justify-content-center" th:fragment="communityRank">
+    <div style="float: left; margin-right: 80px;">
+        <h6>인기 게시글 (1시간 동안 캐싱)</h6>
+        <div><i class="fa-solid fa-1 fa-lg"></i>
+            <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[9].communityId})}"
+               th:text="${rankIngLikesDtoList[9].title}" style="color: black; text-decoration: none;"></a>
+        </div>
+        <div><i class="fa-solid fa-2 fa-lg"></i>
+            <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[8].communityId})}"
+               th:text="${rankIngLikesDtoList[8].title}" style="color: black; text-decoration: none;"></a>
+        </div>
+        <div><i class="fa-solid fa-3 fa-lg"></i>
+            <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[7].communityId})}"
+               th:text="${rankIngLikesDtoList[7].title}" style="color: black; text-decoration: none;"></a>
+        </div>
+        <div><i class="fa-solid fa-4 fa-lg"></i>
+            <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[6].communityId})}"
+               th:text="${rankIngLikesDtoList[6].title}" style="color: black; text-decoration: none;"></a>
+        </div>
+        <div><i class="fa-solid fa-5 fa-lg"></i>
+            <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[5].communityId})}"
+               th:text="${rankIngLikesDtoList[5].title}" style="color: black; text-decoration: none;"></a>
+        </div>
+    </div>
 
+    <div style="float: right; margin-left: 80px;">
+        <br>
+        <div><i class="fa-solid fa-6 fa-lg"></i>
+            <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[4].communityId})}"
+               th:text="${rankIngLikesDtoList[4].title}" style="color: black; text-decoration: none;"></a>
+        </div>
+        <div><i class="fa-solid fa-7 fa-lg"></i>
+            <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[3].communityId})}"
+               th:text="${rankIngLikesDtoList[3].title}" style="color: black; text-decoration: none;"></a>
+        </div>
+        <div><i class="fa-solid fa-8 fa-lg"></i>
+            <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[2].communityId})}"
+               th:text="${rankIngLikesDtoList[2].title}" style="color: black; text-decoration: none;"></a>
+        </div>
+        <div><i class="fa-solid fa-9 fa-lg"></i>
+            <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[1].communityId})}"
+               th:text="${rankIngLikesDtoList[1].title}" style="color: black; text-decoration: none;"></a>
+        </div>
+        <div><i class="fa-solid fa-1 fa-lg"></i><i class="fa-solid fa-0 fa-lg"></i>
+            <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[0].communityId})}"
+               th:text="${rankIngLikesDtoList[0].title}" style="color: black; text-decoration: none;"></a>
+        </div>
+    </div>
+</div>
 
 <nav th:fragment="nav" class="navbar navbar-expand-lg navbar-light bg-white border">
     <div class="container">

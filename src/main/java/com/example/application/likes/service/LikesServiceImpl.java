@@ -2,7 +2,6 @@ package com.example.application.likes.service;
 
 import com.example.application.community.mapper.CommunityWriteMapper;
 import com.example.application.likes.dto.LikesDto;
-import com.example.application.likes.dto.UpDownDto;
 import com.example.application.likes.mapper.LikesReadMapper;
 import com.example.application.likes.mapper.LikesWriteMapper;
 import com.example.application.security.UserAccount;
@@ -12,9 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
-@Transactional
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -28,35 +27,21 @@ public class LikesServiceImpl implements LikesService {
 
 
 
+    @Transactional
     @Override
-    public Long saveAndLike(LikesDto likesDto, UserAccount userAccount) {
-        Long likesCount = likesReadMapper.selectLastLikesCount(likesDto.getCommunityId());
-        if (likesCount == null) {
-            likesCount = 0L;
-        }
-        likesDto.setLikesCount(likesCount);
+    public void insertLikes(LikesDto likesDto, UserAccount userAccount) {
+        likesDto.setAccountId(userAccount.accountId());
         likesWriteMapper.insertLikes(likesDto);
+        communityLikesUpdate(likesDto);
 
+    }
 
-
-        UpDownDto upDownDto = new UpDownDto(likesDto.getCommunityId(), likesDto.getAccountId() , likesDto.getChange());
-        likesWriteMapper.upDownLikes(upDownDto);
-
-        HashMap<String, Long> map = new HashMap<>();
+    private void communityLikesUpdate(LikesDto likesDto) {
+        Long likesCount = likesReadMapper.selectLikesCount(likesDto.getCommunityId());
+        Map map = new HashMap();
         map.put("communityId", likesDto.getCommunityId());
-        map.put("accountId", likesDto.getAccountId());
-
-        Long likes = likesReadMapper.SelectLikes(map);
-
-        HashMap<String, Long> communityUpdateLikes = new HashMap<>();
-        communityUpdateLikes.put("communityId", likesDto.getCommunityId());
-        communityUpdateLikes.put("likes", likes);
-
-        communityWriteMapper.updateLikes(communityUpdateLikes);
-
-
-        return likes;
-
+        map.put("likes", likesCount);
+        communityWriteMapper.updateLikes(map);
     }
 
 

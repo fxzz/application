@@ -5,15 +5,10 @@
 
 
     <insert id="insertLikes" parameterType="com.example.application.likes.dto.LikesDto">
-        INSERT INTO likes (communityId, accountId, likesCount)
-        VALUES (#{communityId}, #{accountId}, #{likesCount})
+        INSERT INTO likes (communityId, accountId)
+        VALUES (#{communityId}, #{accountId})
     </insert>
 
-    <update id="upDownLikes" parameterType="com.example.application.likes.dto.UpDownDto">
-        UPDATE likes
-        SET likesCount = likesCount + #{change}
-        WHERE communityId = #{communityId} AND accountId = #{accountId}
-    </update>
 
 
 

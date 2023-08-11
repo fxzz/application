@@ -2,6 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head th:replace="fragments.html :: head"></head>
 <body>
 <nav th:replace="fragments.html :: nav"></nav>
@@ -15,26 +16,12 @@
             <div th:if="${msg}" class="alert alert-primary text-center" role="alert" style="max-width: 300px; margin: 50px auto 0;">
                 <p th:text="${msg}"></p>
             </div>
-            <div th:if="${error}" class="alert alert-danger text-center" role="alert" style="max-width: 300px; margin: 50px auto 0;">
-                <p th:text="${error}"></p>
-            </div>
 
 
-
-            <p>인기 게시글 *일주일 단위*</p>
-            <table>
-                <tr th:each="rankIngLikesDto, row : ${rankIngLikesDtoList}">
-                    <td th:text="${row.count}"></td>
-                    <td>
-                        <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDto.communityId})}" th:text="${rankIngLikesDto.title}"></a>
-                    </td>
-                </tr>
-            </table>
-
-
-
+    <div th:replace="fragments.html :: communityRank"></div>
             <br>
-
+            <br>
+            <br>
 
             <div class="d-flex justify-content-between align-items-center">
                 <a class="btn btn-primary rounded btn-sm" th:href="@{/community/new}">
