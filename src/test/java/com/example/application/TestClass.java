@@ -26,7 +26,7 @@ import java.util.stream.IntStream;
 //                    // 데이터 생성 로직
 //                    // 여기에 데이터 생성 코드를 작성합니다.
 //                    // 예: communityService.saveCommunity(new CommunityNewReqDto(...), accountId);
-//                    communityWriteMapper.insertCommunity(CommunityDto.CommunityNewDto.builder().content("FFFFFFF").title("FFFFFFFFF").accountId(3L).build());
+//                    communityWriteMapper.insertCommunity(CommunityDto.CommunityNewDto.builder().content("FFFFFFF").title("FFFFFFFFF").accountId(1L).build());
 //                    count.incrementAndGet();
 //                });
 //
