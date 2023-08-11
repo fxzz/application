@@ -11,6 +11,7 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
+            <div th:replace="fragments.html :: communityRank"></div>
             <br>
             <br>
             <ul class="list-group list-group-flush border-top">
@@ -37,7 +38,7 @@
 
 
 
-                                <span style="font-weight: bold; margin-left: 10px;"><i class="fas fa-eye" style="color: #918d8d;"></i> <span th:text="${articleDto.views}">조회수</span></span>
+                                <span style="font-weight: bold; margin-left: 10px;"><i class="fas fa-eye" style="color: #918d8d;"></i> <span th:text="${articleDto.views + 1}">조회수</span></span>
                             </div>
                         </div>
                     </div>

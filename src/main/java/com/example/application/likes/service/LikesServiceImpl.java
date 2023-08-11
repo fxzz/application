@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
-@Transactional
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -21,23 +21,27 @@ public class LikesServiceImpl implements LikesService {
 
     private final LikesReadMapper likesReadMapper;
     private final LikesWriteMapper likesWriteMapper;
+    private final CommunityWriteMapper communityWriteMapper;
 
 
 
 
 
-
+    @Transactional
     @Override
     public void insertLikes(LikesDto likesDto, UserAccount userAccount) {
         likesDto.setAccountId(userAccount.accountId());
         likesWriteMapper.insertLikes(likesDto);
+        communityLikesUpdate(likesDto);
 
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Long selectLikesCount(Long communityId) {
-        return likesReadMapper.selectLikesCount(communityId);
+    private void communityLikesUpdate(LikesDto likesDto) {
+        Long likesCount = likesReadMapper.selectLikesCount(likesDto.getCommunityId());
+        Map map = new HashMap();
+        map.put("communityId", likesDto.getCommunityId());
+        map.put("likes", likesCount);
+        communityWriteMapper.updateLikes(map);
     }
 
 

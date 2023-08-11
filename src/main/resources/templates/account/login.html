@@ -30,6 +30,7 @@
             </div>
             <br>
             <form th:action="@{/login}" method="post" class="mx-auto">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <div class="form-group mb-3 mt-3">
                     <label for="username" style="color: #999;">아이디</label>
                     <input id="username" type="text" name="username" class="form-control">
