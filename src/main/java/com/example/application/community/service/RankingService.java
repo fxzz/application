@@ -71,21 +71,20 @@ public class RankingService {
     // 업데이트 메서드
     public void updateLikesRanking() {
         List<RankIngLikesDto> rankIngLikesDtoList = communityReadMapper.selectCommunityLikesRanking();
+
         for (RankIngLikesDto rankIngLikesDto : rankIngLikesDtoList) {
             Long communityId = rankIngLikesDto.getCommunityId();
-            Long likes = rankIngLikesDto.getLikes() + 1L;
+            Long likes = rankIngLikesDto.getLikes();
             String title = rankIngLikesDto.getTitle();
 
+            String value = communityId + "_" + title;
+            log.info("rankIngLikesDto {}", rankIngLikesDto);
+            log.info("likes {}", likes);
 
-            for (int i = 0; i < likes; i++) {
-                String value = communityId + "_" + title;
-                log.info("rankIngLikesDto {}", rankIngLikesDto);
+            redisTemplate.opsForZSet().add(RANKING_KEY, value, likes); // 중복을 포함한 값으로 추가
 
-                redisTemplate.opsForZSet().add(RANKING_KEY, value, likes - i); // 중복을 포함한 값으로 추가
-
-                // 캐시 만료 시간 설정
-                redisTemplate.expire(RANKING_KEY, TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
-            }
+            // 캐시 만료 시간 설정
+            redisTemplate.expire(RANKING_KEY, TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
         }
     }
 }

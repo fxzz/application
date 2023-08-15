@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.application.admin.mapper.AdminMapper">
+    <select id="selectCommunityManagement" parameterType="com.example.application.admin.dto.SearchCondition" resultMap="communityManagementResultMap">
+        SELECT
+        c.communityId,
+        c.title,
+        c.content,
+        a.nickname,
+        c.createdAt,
+        c.deleted,
+        COUNT(community_report.communityId) AS reportCount
+        FROM community c
+        INNER JOIN account a ON c.accountId = a.accountId
+        LEFT OUTER JOIN community_report_history community_report ON c.communityId = community_report.communityId
+
+        <if test="keyword != null and keyword != ''">
+            WHERE c.title LIKE '%' || #{keyword} || '%'
+        </if>
+        GROUP BY c.communityId, a.nickname
+        ORDER BY c.createdAt DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <resultMap id="communityManagementResultMap" type="com.example.application.admin.dto.CommunityManagementDto">
+        <id property="communityId" column="communityId" />
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="nickname" column="nickname"/>
+        <result property="createdAt" column="createdAt"/>
+        <result property="reportCount" column="reportCount"/>
+        <result property="deleted" column="deleted"/>
+    </resultMap>
+
+
+    <select id="searchCommunityResultCnt" parameterType="com.example.application.admin.dto.SearchCondition" resultType="int">
+        SELECT count(*)
+        FROM COMMUNITY
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND title LIKE concat('%', #{keyword}, '%')
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectCommentManagement" parameterType="com.example.application.admin.dto.SearchCondition" resultMap="commentManagementResultMap">
+        SELECT
+        co.commentId,
+        c.title,
+        co.content,
+        a.nickname,
+        co.createdAt,
+        co.deleted,
+        COUNT(comment_report.commentId) AS reportCount
+        FROM comment co
+        INNER JOIN community c ON co.communityId = c.communityId
+        INNER JOIN account a ON co.accountId = a.accountId
+        LEFT OUTER JOIN comment_report_history comment_report ON co.commentId = comment_report.commentId
+        <if test="keyword != null and keyword != ''">
+            WHERE c.title LIKE '%' || #{keyword} || '%'
+        </if>
+        GROUP BY co.commentId, c.title, co.content, a.nickname, co.createdat
+        ORDER BY co.createdAt DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <resultMap id="commentManagementResultMap" type="com.example.application.admin.dto.CommentManagementDto">
+        <id property="commentId" column="commentId" />
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="nickname" column="nickname"/>
+        <result property="createdAt" column="createdAt"/>
+        <result property="reportCount" column="reportCount"/>
+        <result property="deleted" column="deleted"/>
+    </resultMap>
+
+    <select id="searchCommentResultCnt" parameterType="com.example.application.admin.dto.SearchCondition" resultType="int">
+        SELECT count(*)
+        FROM comment
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND title LIKE concat('%', #{keyword}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectCountTodayAccount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM account
+        WHERE DATE(createdat) = DATE(NOW())
+    </select>
+
+    <select id="selectCountTodayCommunity" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM community
+        WHERE DATE(createdat) = DATE(NOW())
+    </select>
+
+    <select id="selectCountTodayComment" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM comment
+        WHERE DATE(createdat) = DATE(NOW())
+    </select>
+
+    <select id="selectWeeklyAccountCounts" resultType="com.example.application.admin.dto.WeeklyAccountCountsDto">
+        <![CDATA[
+        SELECT
+        SUM(CASE WHEN createdat >= DATE_TRUNC('week', NOW()) AND createdat < DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 1 THEN 1 ELSE 0 END) AS monday_count,
+        SUM(CASE WHEN createdat >= DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 1 AND createdat < DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 2 THEN 1 ELSE 0 END) AS tuesday_count,
+        SUM(CASE WHEN createdat >= DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 2 AND createdat < DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 3 THEN 1 ELSE 0 END) AS wednesday_count,
+        SUM(CASE WHEN createdat >= DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 3 AND createdat < DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 4 THEN 1 ELSE 0 END) AS thursday_count,
+        SUM(CASE WHEN createdat >= DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 4 AND createdat < DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 5 THEN 1 ELSE 0 END) AS friday_count,
+        SUM(CASE WHEN createdat >= DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 5 AND createdat < DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 6 THEN 1 ELSE 0 END) AS saturday_count,
+        SUM(CASE WHEN createdat >= DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 6 AND createdat < DATE_TRUNC('week', NOW()) + INTERVAL '1 day' * 7 THEN 1 ELSE 0 END) AS sunday_count
+        FROM account;
+        ]]>
+    </select>
+
+</mapper>

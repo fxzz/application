@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.application.admin.mapper.AdminMapper">
+<delete id="deleteCommunityManagement" parameterType="Long">
+    UPDATE community
+    SET deleted = 1
+    WHERE communityId = #{communityId}
+</delete>
+
+<delete id="deleteCommentManagement" parameterType="Long">
+    UPDATE comment
+    SET deleted = 1
+    WHERE commentId = #{commentId}
+</delete>
+
+</mapper>
