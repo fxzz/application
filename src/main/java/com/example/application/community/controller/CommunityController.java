@@ -39,6 +39,11 @@ public class CommunityController {
 
     //todo 모든 겟페이지에 모델로 로그인 보내서 프사 고정
 
+    @GetMapping("/")
+    public String main() {
+        return "redirect:/community";
+    }
+
     @GetMapping("/community")
     public String community(Model model, SearchCondition searchCondition, @AuthenticationPrincipal UserAccount userAccount) {
         List<CommunityTagResultDto> communityTagResultDto  = communityService.CommunityTagPagedLimitByKeyword(searchCondition);
@@ -78,6 +83,7 @@ public class CommunityController {
               ArticleDto articleDto = communityService.getArticleById(communityId);
               communityService.updateArticleView(communityId);
               model.addAttribute("articleDto", articleDto);
+
               model.addAttribute("account", userAccount.getAccount());
           //    log.debug("articleDto : {}", articleDto);
 
