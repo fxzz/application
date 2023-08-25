@@ -2,6 +2,7 @@ package com.example.application.security;
 
 import com.example.application.account.dto.Account;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 
@@ -14,6 +15,7 @@ public class UserAccount extends User {
         super(account.getUsername(), account.getPassword(), AuthorityUtils.createAuthorityList("ROLE_"+account.getRole().toString()));
         this.account = account;
     }
+
 
     public Long accountId() {
         return account.getAccountId();

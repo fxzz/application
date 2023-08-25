@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments.html :: head"></head>
+<body>
+<nav th:replace="fragments.html :: nav"></nav>
+
+<div class="container mt-5">
+
+
+    <h1>채팅방 목록</h1>
+    <br>
+    <a th:href="@{/chat/create}" class="btn btn-primary">채팅방 개설</a>
+    <br><br><br>
+    <table class="chat-room-table">
+        <thead>
+        <tr>
+            <th style="padding-right: 10px;">제목</th>
+            <th style="padding-right: 10px;">개설자</th>
+            <th>생성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="chatRoom : ${chatRooms}">
+            <td>
+                <a th:href="@{/chat/{id}(id=${chatRoom.id},title=${chatRoom.title})}" th:text="${chatRoom.title}"></a>
+            </td>
+            <td th:text="${chatRoom.nickname}"></td>
+            <td th:text="${#temporals.format(chatRoom.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
+</div>
+
+
+</body>
+</html>

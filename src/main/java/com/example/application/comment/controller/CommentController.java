@@ -9,6 +9,7 @@ import com.example.application.security.UserAccount;
 import com.example.application.util.ErrorCode;
 import com.example.application.util.ResponseDto;
 import com.example.application.util.ValidationMessageUtils;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,9 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+
+
+
 
 
     @PostMapping("/comment/new")

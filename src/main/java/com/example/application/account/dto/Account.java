@@ -1,5 +1,6 @@
 package com.example.application.account.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.io.Serializable;
