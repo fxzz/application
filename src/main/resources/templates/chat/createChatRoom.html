@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments.html :: head"></head>
+<body>
+<nav th:replace="fragments.html :: nav"></nav>
+
+<div class="container mt-5">
+
+    <h1>채팅방 생성</h1>
+    <form th:action="@{/chat/create}" method="post" >
+        <label for="title">채팅방 제목:</label>
+        <input type="text" id="title" name="title" required>
+        <input hidden id="nickname" name="nickname" th:value="${#authentication.principal.account.nickname}">
+        <button class="btn btn-primary" type="submit">생성하기</button>
+    </form>
+
+
+
+
+</div>
+
+<script src="/webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
+</body>
+</html>

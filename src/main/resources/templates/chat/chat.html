@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments.html :: head"></head>
+<style>
+    .chat-message {
+        background-color: #e0e0e0;
+        padding: 5px;
+        margin: 5px;
+        border-radius: 5px;
+        font-family: Arial, sans-serif;
+    }
+
+
+</style>
+<body>
+<nav th:replace="fragments.html :: nav"></nav>
+
+<div id="chat" class="container" style="max-width: 400px; margin: 0 auto; text-align: center;">
+    <div class="chat-header">
+        <h2 th:text="${'방 제목: ' + title}"></h2>
+    </div>
+    <div class="chat-body">
+        <ul id="messages"></ul>
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="message" placeholder="메세지를 입력하세요." class="form-control input-sm">
+        <br>
+        <button id="send" class="btn btn-primary">전송</button>
+    </div>
+</div>
+
+<br>
+<div id="userList" style="max-width: 400px; margin: 0 auto; text-align: center;"></div>
+
+<div id="roomId" hidden th:text="${roomId}"></div>
+<div hidden id="nickname" th:text="${nickname}"></div>
+<script>
+    var stompClient = null;
+    var roomId = document.getElementById('roomId').textContent;
+    var nickname = document.getElementById('nickname').textContent;
+
+    function connect() {
+        var socket = new SockJS('/chat/' + roomId);
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            stompClient.subscribe('/topic/chat/' + roomId, function(response) { // chatRoomId를 사용하여 해당 채팅방 주제로 구독
+                showMessage(JSON.parse(response.body));
+                loadChatRoomData(roomId);
+
+            });
+
+            sendWelcomeMessage();
+
+        });
+    }
+    function sendWelcomeMessage() {
+        var welcomeMessage = {
+            sender: 'TEST',
+            content: 'TEST',
+            type: 'JOIN'
+        };
+        stompClient.send("/app/chat/" + roomId + "/join", {}, JSON.stringify(welcomeMessage));
+    }
+
+    function sendMessage() {
+        var messageContent = $('#message').val();
+        var username = nickname
+        var chatMessage = {
+            sender: username,
+            content: messageContent,
+            type: 'CHAT'
+        };
+        stompClient.send("/app/chat/" + roomId + "/sendMessage", {}, JSON.stringify(chatMessage)); // chatRoomId를 사용하여 해당 채팅방으로 메시지 전송
+        $('#message').val('');
+    }
+
+
+    function showMessage(message) {
+        var messageHtml = '<p class="chat-message">' + message.sender + ': ' + message.content + '</p>';
+        $('#messages').append(messageHtml);
+    }
+
+    function disconnect() {
+        if (stompClient !== null) {
+            stompClient.disconnect();
+        }
+    }
+    $(function() {
+        connect();
+
+        $('#send').click(function() {
+            sendMessage();
+        });
+        $(window).on("beforeunload", function() {
+            removeUser();
+            disconnect();
+            chatRoomUserRemove(roomId);
+        });
+    });
+
+    function loadChatRoomData(roomId) {
+        $.ajax({
+            url: '/chat/' + roomId + '/users',
+            type: 'GET',
+            success: function (chatList) {
+                $("#userList").html(toHtml(chatList));
+            },
+            error: function () {
+                alert("새로 고침 해주세요.");
+            }
+        });
+    }
+
+    let toHtml = function (chatList) {
+        let tmp = '<ul>';
+            tmp = "<h5>채팅방 접속자</h5>";
+
+        chatList.forEach(function (chat) {
+            tmp += '<li>';
+            tmp += '<span>' + chat + '</span> ';
+            tmp += '</li>';
+        });
+        tmp += "</ul>";
+        return tmp;
+    }
+
+    function chatRoomUserRemove(roomId) {
+        $.ajax({
+            url: '/chat/' + roomId + '/users',
+            data: JSON.stringify({
+                userId: nickname,
+            }),
+            type: 'POST',
+            contentType: 'application/json',
+            success: function () {
+
+            },
+            error: function () {
+                alert("새로 고침 해주세요.");
+            }
+        });
+    }
+    
+    function removeUser() {
+        var removeMessage = {
+            sender: 'TEST',
+            content: 'TEST',
+            type: 'LEAVE'
+        };
+        stompClient.send("/app/chat/" + roomId + "/remove", {}, JSON.stringify(removeMessage));
+    }
+
+
+</script>
+<script th:replace="fragments.html :: ajax-csrf-header"></script>
+<script src="/webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
+</body>
+</html>
