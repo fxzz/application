@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @ToString
 @Getter
@@ -24,6 +25,7 @@ public class Account implements Serializable {
     private Role role;
     private LocalDateTime createdAt;
     private String profileImage;
+    private Map<String, Object> oAuth2Attributes;
 
     @Getter
     @RequiredArgsConstructor
