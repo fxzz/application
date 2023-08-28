@@ -5,9 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+
+import java.util.Map;
 
 @Getter
-public class UserAccount extends User {
+public class UserAccount extends User implements OAuth2User {
 
     private Account account;
 
@@ -25,4 +28,14 @@ public class UserAccount extends User {
         return account.getNickname();
     }
 
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return account.getOAuth2Attributes();
+    }
+
+    @Override
+    public String getName() {
+        return account.getUsername();
+    }
 }
