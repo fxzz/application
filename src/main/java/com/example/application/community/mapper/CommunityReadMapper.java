@@ -14,6 +14,7 @@ public interface CommunityReadMapper {
     ArticleDto selectCommunityByCommunityId(Long communityId);
     List<CommunityTagResultDto> selectAllCommunityTag(SearchCondition searchCondition);
     List<RankIngLikesDto> selectCommunityLikesRanking();
+    Long selectAccountIdByCommunityId(Long communityId);
 
 
 }

@@ -9,7 +9,8 @@ fullName VARCHAR(255),
 nickname VARCHAR(128) UNIQUE,
 role VARCHAR(255),
 createdAt TIMESTAMP,
-profileimage VARCHAR(255)
+profileimage VARCHAR(255),
+notificationEnabled BOOLEAN DEFAULT TRUE
 )
 
 CREATE TABLE community (

@@ -12,5 +12,6 @@ public interface AccountReadMapper {
     int selectNicknameCount(String nickname);
     Account selectUserByUsername(String username);
     AccountProfileRespDto selectUserByAccountId(Long accountId);
+    boolean selectNotificationEnabled(Long accountId);
 
 }

@@ -2,6 +2,7 @@ package com.example.application.account.service;
 
 import com.example.application.account.dto.AccountReqDto.*;
 import com.example.application.account.dto.AccountRespDto.*;
+import com.example.application.account.dto.NotificationUpdateDto;
 import com.example.application.account.mapper.AccountReadMapper;
 import com.example.application.account.mapper.AccountWriteMapper;
 import com.example.application.account.dto.Account;
@@ -84,6 +85,17 @@ public class AccountServiceImpl implements AccountService {
         }else {
             throw new PasswordMismatchException("현재 패스워드가 일치하지 않습니다.");
         }
+    }
+
+    @Transactional
+    @Override
+    public void updateNotificationEnabled(NotificationUpdateDto notificationUpdateDto) {
+        accountWriteMapper.updateNotificationEnabled(notificationUpdateDto);
+    }
+
+    @Override
+    public boolean selectNotificationEnabled(Long accountId) {
+        return accountReadMapper.selectNotificationEnabled(accountId);
     }
 
 

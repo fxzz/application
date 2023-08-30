@@ -23,5 +23,11 @@
         WHERE accountId = #{accountId}
     </update>
 
+    <update id="updateNotificationEnabled" parameterType="com.example.application.account.dto.NotificationUpdateDto">
+        UPDATE account
+        SET notificationEnabled = #{notificationEnabled}
+        WHERE accountId = #{accountId}
+    </update>
+
 
 </mapper>

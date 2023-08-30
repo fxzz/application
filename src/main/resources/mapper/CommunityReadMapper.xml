@@ -97,4 +97,9 @@
     </select>
 
 
+    <select id="selectAccountIdByCommunityId" parameterType="Long" resultType="Long">
+        SELECT c.accountId
+        FROM community c
+        WHERE c.communityId = #{communityId}
+    </select>
 </mapper>
