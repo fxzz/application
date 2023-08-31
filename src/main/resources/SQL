@@ -1,128 +1,6 @@
 /*
 
 CREATE TABLE Account (
-accountId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-username VARCHAR(255) NOT NULL UNIQUE,
-password VARCHAR(255) NOT NULL,
-email VARCHAR(255) UNIQUE,
-fullName VARCHAR(255),
-nickname VARCHAR(128) UNIQUE,
-role VARCHAR(255),
-createdAt TIMESTAMP,
-profileimage VARCHAR(255),
-notificationEnabled BOOLEAN DEFAULT TRUE
-)
-
-CREATE TABLE community (
-  communityId INT AUTO_INCREMENT PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
-  content TEXT NOT NULL,
-  accountId INT NOT NULL,
-  views INT DEFAULT 0,
-  commentCount INT DEFAULT 0,
-  createdAt timestamp NOT NULL now(),
-  likes INT DEFAULT 0,
-  deleted VARCHAR(45),
-  FOREIGN KEY (accountId) REFERENCES account (accountId)
-);
-
-
-
-
-
-  CREATE TABLE Comment (
-    commentId INT AUTO_INCREMENT PRIMARY KEY,
-    communityId INT,
-    parentCommentId INT,
-    accountId INT,
-    content VARCHAR(255) NOT NULL,
-    createdAt TIMESTAMP now(),
-    modifiedAt TIMESTAMP,
-    deleted VARCHAR(45),
-    FOREIGN KEY (communityId) REFERENCES Community(communityId),
-    FOREIGN KEY (parentCommentId) REFERENCES Comment(commentId),
-    FOREIGN KEY (accountId) REFERENCES Account(accountId)
-);
-
-CREATE TABLE likes (
-  likesId INT AUTO_INCREMENT NOT NULL,
-  communityId INT NOT NULL,
-  accountId INT NOT NULL,
-  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  likesCount INT NOT NULL DEFAULT 0,
-  PRIMARY KEY (likesId),
-  UNIQUE (communityId, accountId),
-  FOREIGN KEY (communityId) REFERENCES community (communityId),
-  FOREIGN KEY (accountId) REFERENCES account (accountId)
-);
-
-CREATE TABLE tags (
-  tagId INT PRIMARY KEY AUTO_INCREMENT,
-  tagTitle VARCHAR(50) NOT NULL
-);
-
-
-  CREATE TABLE communityTag (
-  communityTagId INT PRIMARY KEY AUTO_INCREMENT,
-  communityId INT,
-  tagId INT,
-  FOREIGN KEY (communityId) REFERENCES community (communityId),
-  FOREIGN KEY (tagId) REFERENCES tag (tagId)
-);
-
-    CREATE TABLE persistent_logins (
-    series VARCHAR(64) PRIMARY KEY,
-    username VARCHAR(64) NOT NULL,
-    token VARCHAR(64) NOT NULL,
-    last_used TIMESTAMP NOT NULL
-    );
-
-    CREATE INDEX idx_communityTag_communityId ON communityTag (communityId);
-
-
-
-CREATE TABLE comment_report_history (
-  reportId INT AUTO_INCREMENT PRIMARY KEY,
-  accountId INT NOT NULL,
-  commentId INT NOT NULL,
-  reportedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (accountId) REFERENCES account (accountId),
-  FOREIGN KEY (commentId) REFERENCES comment (commentId),
-  UNIQUE (accountId, commentId)
-);
-
-
-CREATE TABLE community_report_history (
-  reportId INT AUTO_INCREMENT PRIMARY KEY,
-  accountId INT NOT NULL,
-  communityId INT NOT NULL,
-  reportedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (accountId) REFERENCES account (accountId),
-  FOREIGN KEY (communityId) REFERENCES community (communityId),
-  UNIQUE (accountId, communityId)
-);
-
-
-
-          SELECT DISTINCT c.communityId, c.title, a.nickname, c.views, c.commentCount, c.createdAt, COUNT(l.communityId) as likes, GROUP_CONCAT(t.tagTitle SEPARATOR ',') AS tagTitle, c.modifiedAt, c.deleted
-                        FROM community c
-                        INNER JOIN account a ON c.accountId = a.accountId
-                        LEFT OUTER JOIN communityTag ct ON c.communityId = ct.communityId
-                        LEFT OUTER JOIN tag t ON ct.tagId = t.tagId
-                        LEFT OUTER JOIN likes l ON c.communityId = l.communityId
-
-
-                        <if test="keyword != null and keyword != ''">
-                            AND (c.title LIKE concat('%', #{keyword}, '%') OR t.tagTitle LIKE concat('%', #{keyword}, '%'))
-                        </if>
-                        GROUP BY c.communityId
-                        ORDER BY c.communityId DESC
-                        LIMIT #{offset}, #{pageSize}
-
-ㅡㅡㅡ postgresql
-
-
-CREATE TABLE Account (
     accountId SERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -131,7 +9,8 @@ CREATE TABLE Account (
     nickname VARCHAR(128) UNIQUE,
     role VARCHAR(255),
     createdAt TIMESTAMP,
-    profileImage varchar(255)
+    profileImage varchar(255),
+    notificationEnabled boolean DEFAULT TRUE
 );
 
 CREATE TABLE Community (
@@ -216,6 +95,13 @@ CREATE TABLE community_report_history (
 CREATE INDEX idx_communityTag_communityId ON communityTag (communityId);
 
 
-
+CREATE TABLE notification (
+    id SERIAL PRIMARY KEY,
+    message VARCHAR(255),
+    link VARCHAR(255),
+    checked BOOLEAN,
+    accountId BIGINT,
+    createdAt TIMESTAMP
+);
 
 */

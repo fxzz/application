@@ -26,6 +26,7 @@ public class Account implements Serializable {
     private LocalDateTime createdAt;
     private String profileImage;
     private Map<String, Object> oAuth2Attributes;
+    private boolean notificationEnabled;
 
     @Getter
     @RequiredArgsConstructor

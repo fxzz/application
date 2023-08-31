@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.example.application.community.dto.CommunityDto.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface CommunityReadMapper {
@@ -14,7 +15,7 @@ public interface CommunityReadMapper {
     ArticleDto selectCommunityByCommunityId(Long communityId);
     List<CommunityTagResultDto> selectAllCommunityTag(SearchCondition searchCondition);
     List<RankIngLikesDto> selectCommunityLikesRanking();
-    Long selectAccountIdByCommunityId(Long communityId);
+    Map<String, Object> selectAccountTitleByCommunityId(Long communityId);
 
 
 }

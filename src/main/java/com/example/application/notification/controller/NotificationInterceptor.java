@@ -1,6 +1,8 @@
 package com.example.application.notification.controller;
 
 import com.example.application.account.dto.Account;
+import com.example.application.notification.mapper.NotificationReadMapper;
+import com.example.application.notification.service.NotificationService;
 import com.example.application.security.UserAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -17,15 +19,16 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class NotificationInterceptor implements HandlerInterceptor {
 
-  //  private final NotificationMapper notificationMapper;
+    private final NotificationService notificationService;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if (modelAndView != null && !isRedirectView(modelAndView) && authentication != null && authentication.getPrincipal() instanceof UserAccount) {
         Account account = ((UserAccount) authentication.getPrincipal()).getAccount();
-//        long count = notificationMapper.countByAccountAndChecked(account, false);
-//        modelAndView.addAllObjects("hasNotification", count > 0);
+        Long count = notificationService.selectNotificationCount(account.getAccountId());
+        modelAndView.addObject("hasNotification", count > 0);
         }
     }
 

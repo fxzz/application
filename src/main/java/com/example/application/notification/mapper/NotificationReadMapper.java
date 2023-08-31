@@ -1,13 +1,13 @@
-package com.example.application.notification.service;
+package com.example.application.notification.mapper;
 
 import com.example.application.notification.dto.NotificationDto;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-public interface NotificationService {
+@Mapper
+public interface NotificationReadMapper {
     List<NotificationDto> selectNotificationByAccountId(Long accountId);
-    void readNotification(Long id);
     List<NotificationDto> selectReadNotificationByAccountId(Long accountId);
-    void deleteReadNotificationsByAccountId(Long accountId);
     Long selectNotificationCount(Long accountId);
 }

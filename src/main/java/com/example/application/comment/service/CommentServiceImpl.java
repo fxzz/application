@@ -8,7 +8,6 @@ import com.example.application.comment.event.CommentCreatedEvent;
 import com.example.application.comment.mapper.CommentReadMapper;
 import com.example.application.comment.mapper.CommentWriteMapper;
 import com.example.application.community.mapper.CommunityWriteMapper;
-import com.example.application.notification.dto.NotificationDto;
 import com.example.application.security.UserAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
