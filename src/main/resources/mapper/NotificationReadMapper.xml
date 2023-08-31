@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.application.notification.mapper.NotificationReadMapper">
+
+    <select id="selectNotificationByAccountId" parameterType="Long" resultType="com.example.application.notification.dto.NotificationDto">
+        SELECT id, message, link, checked, accountId, createdAt
+        FROM notification
+        WHERE accountId = #{accountId} AND checked = false
+        ORDER BY createdAt DESC
+    </select>
+
+    <select id="selectReadNotificationByAccountId" parameterType="Long" resultType="com.example.application.notification.dto.NotificationDto">
+        SELECT id, message, link, checked, accountId, createdAt
+        FROM notification
+        WHERE accountId = #{accountId} AND checked = true
+        ORDER BY createdAt DESC
+    </select>
+
+    <select id="selectNotificationCount" parameterType="Long" resultType="Long">
+        SELECT COUNT(*)
+        FROM notification
+        WHERE accountId = #{accountId} AND checked = false
+    </select>
+
+
+
+
+</mapper>

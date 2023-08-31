@@ -4,11 +4,13 @@ import com.example.application.comment.dto.DeleteCommentDto;
 import com.example.application.comment.dto.InsertCommentDto;
 import com.example.application.comment.dto.InsertReplyDto;
 import com.example.application.comment.dto.SelectCommentDto;
+import com.example.application.comment.event.CommentCreatedEvent;
 import com.example.application.comment.mapper.CommentReadMapper;
 import com.example.application.comment.mapper.CommentWriteMapper;
 import com.example.application.community.mapper.CommunityWriteMapper;
 import com.example.application.security.UserAccount;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentWriteMapper commentWriteMapper;
     private final CommentReadMapper commentReadMapper;
     private final CommunityWriteMapper communityWriteMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
 
 
@@ -30,6 +33,7 @@ public class CommentServiceImpl implements CommentService {
         insertCommentDto.setAccountId(userAccount.accountId());
         commentWriteMapper.insertComment(insertCommentDto);
         communityWriteMapper.updateCommentCnt(insertCommentDto.getCommunityId());
+        eventPublisher.publishEvent(new CommentCreatedEvent(insertCommentDto));
     }
 
 

@@ -59,7 +59,7 @@
 <div class="d-flex justify-content-center" th:fragment="communityRank" >
     <h6 th:if="${rankIngLikesDtoList.size() < 9}">인기 게시글 (집계중)</h6>
     <div style="float: left; margin-right: 80px;" th:if="${rankIngLikesDtoList.size() > 9}">
-        <h6>인기 게시글 (1시간 동안 캐싱)</h6>
+        <h6>인기 게시글 (레디스에서 1시간 동안 캐싱)</h6>
         <div th:if="${rankIngLikesDtoList.size() > 0}"><i class="fa-solid fa-1 fa-lg"></i>
             <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[0].communityId})}"
                th:text="${rankIngLikesDtoList[0].title}" style="color: black; text-decoration: none;"></a>
@@ -116,13 +116,13 @@
                     <a class="nav-link" th:href="@{/community}" style="color: black; ">커뮤니티</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/chatroom}" style="color: black;">chat</a>
+                    <a class="nav-link" th:href="@{/chatroom}" style="color: black;">채팅</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin}" style="color: black; ">어드민</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#" style="color: black;"></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/admin}" style="color: black; ">admin</a>
                 </li>
             </ul>
         </div>
@@ -138,8 +138,9 @@
 
         <ul class="navbar-nav ml-auto" style="margin-right: 90px;" sec:authorize="isAuthenticated()">
             <li class="nav-item" >
-                <a class="nav-link" th:href="@{/}" style="margin-top: 5px;">
-                    <i class="fas fa-bell fa-lg" style="color: #b4b1b1;"></i>
+                <a class="nav-link" th:href="@{/notification}" style="margin-top: 5px;">
+                    <i th:unless="${hasNotification}" class="fas fa-bell fa-lg" style="color: #606062;"></i>
+                    <i th:if="${hasNotification}" class="fas fa-bell fa-lg" style="color: gold;"></i>
                 </a>
             </li>
             <li class="nav-item dropdown">

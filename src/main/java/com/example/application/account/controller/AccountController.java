@@ -3,6 +3,7 @@ package com.example.application.account.controller;
 
 import com.example.application.account.dto.AccountReqDto.*;
 import com.example.application.account.dto.AccountRespDto.*;
+import com.example.application.account.dto.NotificationUpdateDto;
 import com.example.application.account.service.AccountService;
 import com.example.application.account.validator.AccountPasswordValidator;
 import com.example.application.account.validator.AccountProfileValidator;
@@ -97,7 +98,7 @@ public class AccountController {
     }
 
     @PostMapping("/profile/password")
-    public String  password(@Valid PasswordChangeReqDto passwordChangeReqDto, BindingResult bindingResult, @AuthenticationPrincipal UserAccount userAccount, Model model, RedirectAttributes attributes) {
+    public String password(@Valid PasswordChangeReqDto passwordChangeReqDto, BindingResult bindingResult, @AuthenticationPrincipal UserAccount userAccount, Model model, RedirectAttributes attributes) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("passwordChangeReqDto", passwordChangeReqDto);
             return "account/password";
@@ -105,6 +106,24 @@ public class AccountController {
         accountService.passwordChange(userAccount.getAccount(), passwordChangeReqDto);
         attributes.addFlashAttribute("msg", "패스워드를 변경했습니다.");
         return "redirect:/profile/password";
+    }
+
+    @GetMapping("/profile/notification")
+    public String getNotification(@AuthenticationPrincipal UserAccount userAccount, Model model) {
+        boolean notificationEnabled = accountService.selectNotificationEnabled(userAccount.accountId());
+        model.addAttribute("notificationEnabled", notificationEnabled);
+        log.info("notificationEnabled {}", notificationEnabled);
+        return "account/notification";
+    }
+
+
+    @PostMapping("/profile/notification")
+    public String updateNotification(NotificationUpdateDto notificationUpdateDto, @AuthenticationPrincipal UserAccount userAccount, RedirectAttributes attributes) {
+        notificationUpdateDto.setAccountId(userAccount.accountId());
+
+        accountService.updateNotificationEnabled(notificationUpdateDto);
+        attributes.addFlashAttribute("msg", "알림 설정을 업데이트 했습니다");
+        return "redirect:/profile/notification";
     }
 
 }

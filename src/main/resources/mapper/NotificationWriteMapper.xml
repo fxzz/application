@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.application.notification.mapper.NotificationWriteMapper">
+
+    <insert id="insertNotification" parameterType="com.example.application.notification.dto.NotificationDto">
+        INSERT INTO notification (message, link, checked, accountId, createdAt)
+        VALUES (#{message}, #{link}, #{checked}, #{accountId}, #{createdAt})
+    </insert>
+
+    <update id="readNotification" parameterType="Long">
+        UPDATE notification
+        SET checked = true
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteReadNotificationsByAccountId" parameterType="Long">
+        DELETE FROM notification
+        WHERE accountId = #{accountId} AND checked = TRUE
+    </delete>
+
+
+
+</mapper>

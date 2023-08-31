@@ -29,6 +29,12 @@
         WHERE accountId = #{accountId}
     </select>
 
+    <select id="selectNotificationEnabled" parameterType="Long" resultType="boolean">
+        SELECT notificationEnabled
+        FROM account
+        WHERE accountId = #{accountId}
+    </select>
+
 
 
 

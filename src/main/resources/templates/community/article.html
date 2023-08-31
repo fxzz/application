@@ -21,7 +21,7 @@
                             <svg th:data-jdenticon-value="${articleDto.nickname}" data-jdenticon-value="user127" width="42" height="42" class="rounded-circle border bg-light"></svg>
                         </div>
                         <div>
-                            <span style="font-weight: bold; font-size: 17px;" th:text="${articleDto.nickname}">글쓴이</span> <span><a id="communityReportBtn" style="cursor: pointer;"><i class="fas fa-exclamation-triangle fa-lg" style="color: #f3311b;"></i></a></span>
+                            <span style="font-weight: bold; font-size: 17px;" th:text="${articleDto.nickname}">글쓴이</span> <span><a id="communityReportBtn" style="cursor: pointer; opacity: 0.7; font-size: 90%;">신고</a></span>
                             <div style="display: flex; align-items: center; margin-top: 5px;">
 
                                          <span style="color: #918d8d; font-weight: bold;" th:if="${articleDto?.modifiedAt == null}" th:with="startOfDay=${#temporals.createToday().atStartOfDay()}">

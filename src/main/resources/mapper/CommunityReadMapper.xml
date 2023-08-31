@@ -97,4 +97,12 @@
     </select>
 
 
+    <select id="selectAccountTitleByCommunityId" parameterType="Long" resultType="java.util.HashMap" >
+        SELECT c.accountId, c.title
+        FROM community c
+        WHERE c.communityId = #{communityId}
+    </select>
+
+
 </mapper>
+

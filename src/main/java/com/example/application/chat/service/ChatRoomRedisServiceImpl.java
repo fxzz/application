@@ -3,20 +3,15 @@ package com.example.application.chat.service;
 import com.example.application.chat.dto.ChatRoomDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ScanOptions;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.application.chat.config.RedisConfig.EXPIRATION_DAYS;
+import static com.example.application.config.RedisConfig.EXPIRATION_DAYS;
 
 @Service
 @Slf4j

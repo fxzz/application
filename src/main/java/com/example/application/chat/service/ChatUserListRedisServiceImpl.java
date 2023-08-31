@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.application.chat.config.RedisConfig.EXPIRATION_DAYS;
+import static com.example.application.config.RedisConfig.EXPIRATION_DAYS;
 
 
 @RequiredArgsConstructor
