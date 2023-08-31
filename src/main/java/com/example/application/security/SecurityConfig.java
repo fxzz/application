@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -27,9 +28,11 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final DataSource dataSource;
     private final OAuth2UserService oAuth2UserService;
+    private final BucketFilter bucketFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.addFilterBefore(bucketFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeRequests().antMatchers("/", "/login" , "/signup", "/community").permitAll()
                 .anyRequest().authenticated();
 
