@@ -20,7 +20,7 @@
 
 
                         SELECT c.communityId, c.title, a.nickname, c.views, c.commentCount, c.createdAt,
-                        c.likes, STRING_AGG(t.tagTitle, ',') AS tagTitle, c.modifiedAt, c.deleted
+                        c.likes, STRING_AGG(t.tagTitle, ',') AS tagTitle, c.modifiedAt, c.deleted, c.imageEnabled
                         FROM community c
                         INNER JOIN account a ON c.accountId = a.accountId
                         LEFT OUTER JOIN communityTag ct ON c.communityId = ct.communityId
@@ -46,6 +46,7 @@
         <result property="likes" column="likes"/>
         <result property="modifiedAt" column="modifiedAt" />
         <result property="deleted" column="deleted" />
+        <result property="imageEnabled" column="imageEnabled" />
         <collection property="tagTitle" ofType="java.lang.String">
             <result column="tagTitle"/>
         </collection>

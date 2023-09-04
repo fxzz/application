@@ -12,7 +12,8 @@
         <div class="col-2"></div>
         <div class="col-8">
 
-            <form  method="post" class=" mx-auto" th:action="@{'/articles/' + ${articleModificationFormDto.communityId} + '/modify'}" th:object="${articleModificationFormDto}">
+            <form  method="post" class=" mx-auto" th:action="@{'/articles/' + ${articleModificationFormDto.communityId} + '/modify'}" th:object="${articleModificationFormDto}" enctype="multipart/form-data">
+                <div id="communityId" hidden th:text="${articleModificationFormDto.communityId}"></div>
                 <div class="form-group">
                     <label for="title">제목</label>
                     <input id="title" th:field="*{title}" type="text" class="form-control">
@@ -37,11 +38,24 @@
                 <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}" ></small>
                     <br>
                     <br>
+
+                <div>
+                    <div>파일 업로드</div>
+                    <div id="uploadDiv">
+                        <input type="file" id="file" th:name="files" multiple/>
+                    </div>
+                </div>
+                <br>
+
                 <div class="form-group">
                     <button class="btn btn-primary btn-block" type="submit">변경</button>
                 </div>
-                </div>
             </form>
+                <div id="fileList">
+                    <ul></ul>
+                </div>
+            <br>
+
 
 
         </div>
@@ -63,7 +77,6 @@
                 ['style', ['style']],
                 ['font', ['bold', 'underline']],
                 ['para', ['ul', 'ol']],
-                ['insert', ['picture']],
             ],
             callbacks: {
                 onInit: function () {
@@ -71,10 +84,71 @@
                 }
             }
         });
+
+        var communityId = document.getElementById("communityId").textContent;
+
+        fileList(communityId);
     });
+
+
+
+    let files = [];
+
+    function fileList(communityId) {
+        $.ajax({
+            url: '/file-list?communityId=' + communityId,
+            type: 'GET',
+            success: function (result) {
+            console.log(result);
+                files = files.concat(result);
+                showFiles();
+            }
+        })
+    }
+
+    function showFiles() {
+        let tmp = ``;
+        for (file of files) {
+            tmp += `<li><span>${file.filename}</span>
+                        <button id="deleteBtn" onclick="deleteFile('${file.newFilename}')">삭제</button>
+                        </li>`
+        }
+        $('#fileList ul').html(tmp);
+    }
+
+    function deleteFile(newFilename) {
+        $.ajax({
+            url: '/deleteFile',
+            data: { newFilename : newFilename },
+            type: 'POST',
+            success: function (result) {
+
+                files = files.filter(item => item.newFilename != newFilename);
+                showFiles();
+                if (files.length === 0) {
+                    disableImage();
+                }
+            }
+        });
+    };
+
+    function disableImage() {
+        var communityId = document.getElementById("communityId").textContent;
+        $.ajax({
+            url: '/imageEnabled',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                communityId: communityId,
+                isImageEnabled: false
+            }),
+            type: 'POST',
+            success: function (result) {
+
+            }
+        });
+    };
 </script>
 <script type="application/javascript">
-
     $(function () {
         function tagRequest(url, tagTitle) {
             $.ajax({

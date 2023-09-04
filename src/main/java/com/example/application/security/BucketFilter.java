@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -39,7 +40,6 @@ public class BucketFilter extends OncePerRequestFilter {
 
         if (isAuthenticatedUser(authentication) && isHttpPostRequest(request)) {
             Bucket bucket = getUserBucket(getAccountId(authentication));
-
             if (consumeToken(bucket, response)) {
                 filterChain.doFilter(request, response);
             }
@@ -47,6 +47,12 @@ public class BucketFilter extends OncePerRequestFilter {
             // POST 요청이 아닌 경우에는 토큰을 소비하지 않고 처리
             filterChain.doFilter(request, response);
         }
+    }
+
+    //fly.io 는 일정시간 사용 안하면 서버가 꺼져서 의미가 없지만 이런 방법도 있다는 것을 기록
+    @Scheduled(fixedRate = 3600000) //1시간 마다 메서드 실행
+    public void cleanupExpiredBuckets() {
+        userBuckets.clear();
     }
 
 

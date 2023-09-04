@@ -1,28 +1,39 @@
 package com.example.application.community.controller;
 
 import com.example.application.community.dto.CommunityDto.*;
+import com.example.application.community.dto.CommunityImageEnabledDto;
 import com.example.application.community.dto.PageHandler;
 import com.example.application.community.dto.RankIngLikesDto;
 import com.example.application.community.dto.SearchCondition;
 import com.example.application.community.service.CommunityService;
 import com.example.application.community.service.RankingService;
+import com.example.application.image.dto.ImageDto;
+import com.example.application.image.mapper.ImageReadMapper;
+import com.example.application.image.service.ImageService;
 import com.example.application.security.UserAccount;
 import com.example.application.tag.service.TagService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,7 +45,8 @@ public class CommunityController {
     private final ObjectMapper objectMapper;
     private final RankingService rankingService;
 
-
+    @Value("${uploadPath}")
+    private String uploadPath;
 
 
     //todo 모든 겟페이지에 모델로 로그인 보내서 프사 고정
@@ -50,7 +62,6 @@ public class CommunityController {
         PageHandler ph = communityService.createPageHandler(searchCondition);
         model.addAttribute("communityTagResultDto", communityTagResultDto);
         model.addAttribute("ph", ph);
-        log.debug("communityTagResultDto : {}", communityTagResultDto);
 
         List<RankIngLikesDto> rankIngLikesDtoList = rankingService.getTopLikesRank(10);
         model.addAttribute("rankIngLikesDtoList", rankIngLikesDtoList);
@@ -65,14 +76,14 @@ public class CommunityController {
     }
 
     @PostMapping("/community/new")
-    public String communityNew(@Valid CommunityNewReqDto communityNewReqDto,BindingResult bindingResult ,@AuthenticationPrincipal UserAccount userAccount, Model model, RedirectAttributes attributes) throws JsonProcessingException {
+    public String communityNew(@Valid CommunityNewReqDto communityNewReqDto, BindingResult bindingResult, MultipartFile[] files, @AuthenticationPrincipal UserAccount userAccount, Model model, RedirectAttributes attributes) throws IOException {
         if (bindingResult.hasErrors()) {
             model.addAttribute("titleError", bindingResult.getFieldError("title") != null ? bindingResult.getFieldError("title").getDefaultMessage() : null);
             model.addAttribute("contentError", bindingResult.getFieldError("content") != null ? bindingResult.getFieldError("content").getDefaultMessage() : null);
             model.addAttribute("communityNewReqDto", communityNewReqDto);
             return "community/new";
         }
-        communityService.saveCommunity(communityNewReqDto, userAccount.accountId());
+        communityService.saveCommunity(communityNewReqDto, userAccount.accountId(), files, uploadPath);
         attributes.addFlashAttribute("msg", "글쓰기를 성공 했습니다.");
         return "redirect:/community";
     }
@@ -80,15 +91,15 @@ public class CommunityController {
 
     @GetMapping("article/{communityId}")
     public String article(@PathVariable Long communityId, Model model, @AuthenticationPrincipal UserAccount userAccount) {
-              ArticleDto articleDto = communityService.getArticleById(communityId);
-              communityService.updateArticleView(communityId);
-              model.addAttribute("articleDto", articleDto);
+        ArticleDto articleDto = communityService.getArticleById(communityId);
+        communityService.updateArticleView(communityId);
+        model.addAttribute("articleDto", articleDto);
+        model.addAttribute("account", userAccount.getAccount());
 
-              model.addAttribute("account", userAccount.getAccount());
-          //    log.debug("articleDto : {}", articleDto);
 
         List<RankIngLikesDto> rankIngLikesDtoList = rankingService.getRankIngLikesDtoList();
         model.addAttribute("rankIngLikesDtoList", rankIngLikesDtoList);
+
         return "community/article";
     }
 
@@ -108,14 +119,14 @@ public class CommunityController {
     }
 
     @PostMapping("/articles/{communityId}/modify")
-    public String articleModify(@PathVariable Integer communityId, @Valid ArticleModificationFormDto articleModificationFormDto, BindingResult bindingResult, Model model, RedirectAttributes attributes) throws JsonProcessingException {
+    public String articleModify(@PathVariable Integer communityId, MultipartFile[] files, @Valid ArticleModificationFormDto articleModificationFormDto, BindingResult bindingResult, Model model, RedirectAttributes attributes) throws IOException {
        if (bindingResult.hasErrors()) {
            model.addAttribute("articleModificationFormDto", articleModificationFormDto);
            model.addAttribute("whitelist", objectMapper.writeValueAsString(tagService.selectAllTag()));
            return "community/articleEdit";
        }
 
-       communityService.modifyArticle(communityId, articleModificationFormDto);
+       communityService.modifyArticle(communityId, articleModificationFormDto, files, uploadPath);
        attributes.addFlashAttribute("msg", "글을 변경 했습니다.");
 
 
@@ -123,7 +134,12 @@ public class CommunityController {
     }
 
 
-
+    @PostMapping("/imageEnabled")
+    @ResponseBody
+    public ResponseEntity<String> communityImageEnabled(@RequestBody CommunityImageEnabledDto communityImageEnabledDto) {
+        communityService.updateCommunityImageEnabled(communityImageEnabledDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 }

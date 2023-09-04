@@ -51,6 +51,7 @@ public class CommunityDto  {
        private List<String> tagTitle;
        private LocalDateTime modifiedAt;
        private String deleted;
+       private boolean imageEnabled;
 
     }
 

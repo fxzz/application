@@ -53,6 +53,9 @@
             <br>
             <h1 th:text="${articleDto.title}">제목</h1>
             <br>
+            <div id="fileList">
+                <ul></ul>
+            </div>
             <h4 th:utext="${articleDto.content}">타이틀</h4>
             <br>
             <br>
@@ -75,6 +78,8 @@
             </div>
             <br>
 
+            <div id="downloadFile"></div>
+
             <ul class="list-group list-group-flush border-top d-flex">
 
                 <li class="list-group-item border-bottom" th:if="${articleDto.accountId == #authentication.principal.account.accountId}" style="display: flex; justify-content: flex-start; align-items: center;">
@@ -83,7 +88,7 @@
                     </div>
                     <div style="margin-left: 10px;">
                         <form th:action="@{'/articles/' + ${articleDto.communityId} + '/delete'}" method="post">
-                            <button type="submit" class="btn btn-light" style="font-weight: bold;"  onclick="confirmDelete()">삭제</button>
+                            <button type="submit" class="btn btn-light" style="font-weight: bold;" >삭제</button>
                         </form>
                     </div>
                 </li>
@@ -174,7 +179,43 @@
         var communityId = $('#communityId').text();
         var accountId = $('#accountId').text();
         showList(communityId);
+        fileList(communityId);
     });
+
+    let files = [];
+
+    function fileList(communityId) {
+        $.ajax({
+            url: '/file-list?communityId=' + communityId,
+            type: 'GET',
+            success: function (result) {
+
+                files = files.concat(result);
+                showFiles();
+                downFiles();
+            }
+        })
+    }
+
+    function showFiles() {
+        let tmp = ``;
+        for (file of files) {
+            tmp += `<li style="list-style-type: none;">
+                        <img src="/download?filename=${file.newFilename}" alt="Image Description" >
+                    </li><br>`
+        }
+        $('#fileList ul').html(tmp);
+    }
+
+    function downFiles() {
+        let tmp = ``;
+        for (file of files) {
+            tmp += `
+                        <a href="/download?filename=${file.newFilename}" download="${file.filename}" style="color: black;">${file.filename}</a>
+                    `
+        }
+        $('#downloadFile').html(tmp);
+    }
 
 
 
@@ -432,13 +473,6 @@
 
 
 
-</script>
-<script>
-    function confirmDelete() {
-        if (confirm("정말 삭제하시겠습니까?")) {
-            document.getElementById("deleteForm").submit();
-        }
-    }
 </script>
 </body>
 </html>
