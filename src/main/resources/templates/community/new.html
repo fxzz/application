@@ -12,7 +12,7 @@
         <div class="col-2"></div>
         <div class="col-8">
 
-            <form th:action="@{/community/new}" method="post" class=" mx-auto">
+            <form th:action="@{/community/new}" method="post" class=" mx-auto" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="title">제목</label>
                     <input id="title" name="title" type="text" th:value="${communityNewReqDto?.title}"  class="form-control">
@@ -36,19 +36,28 @@
                     <label for="content">내용</label>
                     <textarea id="content" name="content" th:attr="data-initial-value=${communityNewReqDto?.content}" class="form-control" rows="10"></textarea>
                     <small class="form-error text-danger" th:if="${contentError}" th:text="${contentError}"></small>
-
-
-
                 </div>
+
+                <div>
+                    <div>파일 업로드</div>
+                    <div id="uploadDiv">
+                        <input type="file" id="file" th:name="files" multiple/>
+                    </div>
+                </div>
+                <br>
 
                 <div class="form-group">
                     <button class="btn btn-primary btn-block" type="submit">글쓰기</button>
                 </div>
+            <br>
             </form>
 
 
         </div>
-        <div class="col-2"></div>
+
+        <div class="col-2">
+
+        </div>
     </div>
 </div>
 
@@ -66,7 +75,7 @@
                 ['style', ['style']],
                 ['font', ['bold', 'underline']],
                 ['para', ['ul', 'ol']],
-                ['insert', ['picture']],
+
             ],
             callbacks: {
                 onInit: function () {

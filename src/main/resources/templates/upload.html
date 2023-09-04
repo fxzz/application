@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"></head>
+<script>
+    let fileList = [];
+
+    function deleteFile(filename) {
+        $.ajax({
+            url: '/deleteFile',
+            data: { filename : filename },
+            dataType: 'text',
+            type: 'POST',
+            success: function (result) {
+
+                fileList = fileList.filter(f => f!=filename) //해당 파일을 제외한 파일만 보인다
+                showFileList();
+            }
+        })
+    }
+
+    function showFileList() {
+        let tmp = ``;
+        for (file of fileList) {
+            tmp += `<li><a href="/download?filename=${file}">${file}</a>
+                        <button id="deleteBtn" onclick="deleteFile('${file}')">삭제</button>
+                        <img src="/download?filename=${file}" alt="Image Description">
+                        </li>`
+        }
+        $('#fileList ul').html(tmp);
+    }
+
+    $(document).ready(function() {
+        let copy = $("#uploadDiv").clone();
+
+        $('#uploadBtn').on("click", function() {
+            var formData = new FormData();
+            var inputFile = $('input[name=files]');
+            var files = inputFile[0].files;
+
+            for (i=0; i<files.length; i++) {
+                formData.append("files", files[i]);
+            }
+
+            $.ajax({
+                url:'/upload',
+                processData: false,
+                contentType: false,
+                data: formData,
+                type: 'POST',
+                success: function (result) {
+                    console.dir(result);
+
+                    $('#uploadDiv').html(copy.html());
+
+                    fileList = fileList.concat(result);
+                    showFileList()
+                }
+            });
+        });
+    });
+</script>
+<body>
+<nav th:replace="fragments.html :: nav"></nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <h2>파일 업로드</h2>
+
+<!--            <form id="uploadForm" th:action="@{/upload}" method="post" enctype="multipart/form-data">-->
+            <div id="uploadDiv">
+                <input type="file" id="file" name="files" multiple/>
+            </div>
+                <br><br>
+                <button id="uploadBtn">Upload File</button>
+
+            <div id="fileList">
+                <ul>
+
+                </ul>
+            </div>
+
+            <div id="imageContainer">
+
+            </div>
+
+
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+
+
+
+<script th:replace="fragments.html :: ajax-csrf-header"></script>
+</body>
+</html>

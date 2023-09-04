@@ -1,6 +1,7 @@
 package com.example.application.community.mapper;
 
 import com.example.application.community.dto.CommunityDto.*;
+import com.example.application.community.dto.CommunityImageEnabledDto;
 import org.apache.ibatis.annotations.Mapper;
 
 
@@ -18,5 +19,6 @@ public interface CommunityWriteMapper {
    void updateArticle(ArticleModificationDto articleModificationDto);
    void updateLikes(Map map);
    void updateCommentCnt(Long communityId);
+   void updateCommunityImageEnabled(CommunityImageEnabledDto communityImageEnabledDto);
 
 }

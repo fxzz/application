@@ -1,10 +1,12 @@
 package com.example.application.community.service;
 
 import com.example.application.community.dto.CommunityDto.*;
+import com.example.application.community.dto.CommunityImageEnabledDto;
 import com.example.application.community.dto.PageHandler;
 import com.example.application.community.dto.SearchCondition;
 import com.example.application.community.mapper.CommunityReadMapper;
 import com.example.application.community.mapper.CommunityWriteMapper;
+import com.example.application.image.service.ImageService;
 import com.example.application.security.UserAccount;
 import com.example.application.tag.service.TagService;
 import com.example.application.util.exception.InvalidAccessOperationException;
@@ -15,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,23 +30,27 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-
 public class CommunityServiceImpl implements CommunityService {
 
     private final CommunityWriteMapper communityWriteMapper;
     private final CommunityReadMapper communityReadMapper;
     private final ObjectMapper objectMapper;
     private final TagService tagService;
+    private final ImageService imageService;
 
 
 
 
     @Override
-    public void saveCommunity(CommunityNewReqDto communityNewReqDto, Long accountId) throws JsonProcessingException {
+    public void saveCommunity(CommunityNewReqDto communityNewReqDto, Long accountId, MultipartFile[] files, String uploadPath) throws IOException {
         CommunityNewDto communityNewDto = getCommunity(communityNewReqDto, accountId);
 
         communityWriteMapper.insertCommunity(communityNewDto);
 
+
+        if (files != null) {
+            imageService.uploadFile(files, communityNewDto.getCommunityId().longValue(), uploadPath);
+        }
 
             List<String> tagList = objectMapper.readValue(communityNewReqDto.getTag(), ArrayList.class);
             for (String tag : tagList) {
@@ -51,8 +59,8 @@ public class CommunityServiceImpl implements CommunityService {
               map.put("tagId", tagId);
               map.put("communityId",communityNewDto.getCommunityId());
                 communityWriteMapper.insertCommunityTag(map);
+                log.info("communityId : {}", communityNewDto.getCommunityId());
             }
-
     }
 
 
@@ -60,6 +68,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Transactional(readOnly = true)
     @Override
     public List<CommunityTagResultDto> CommunityTagPagedLimitByKeyword(SearchCondition searchCondition) {
+
         return communityReadMapper.selectAllCommunityTag(searchCondition);
     }
 
@@ -73,7 +82,7 @@ public class CommunityServiceImpl implements CommunityService {
 
 
 
-
+    @Transactional(readOnly = true)
     @Override
     public ArticleDto getArticleById(Long communityId) {
         return communityReadMapper.selectCommunityByCommunityId(communityId);
@@ -106,16 +115,20 @@ public class CommunityServiceImpl implements CommunityService {
         if (!articleModificationFormDto.getAccountId().equals(userAccount.accountId())) {
             throw new InvalidAccessOperationException("잘못된 접근입니다.");
         }
+
         return articleModificationFormDto;
     }
 
     @Override
-    public void modifyArticle(Integer communityId, ArticleModificationFormDto articleModificationFormDto) throws JsonProcessingException {
+    public void modifyArticle(Integer communityId, ArticleModificationFormDto articleModificationFormDto, MultipartFile[] files, String uploadPath) throws IOException {
         ArticleModificationDto articleModificationDto = getArticleModificationDto(articleModificationFormDto);
 
         communityWriteMapper.deleteCommunityTagsByCommunityId(articleModificationFormDto.getCommunityId());
         updateArticle(articleModificationDto);
 
+        if (files != null) {
+            imageService.uploadFile(files, communityId.longValue(), uploadPath);
+        }
 
             List<String> tagList = objectMapper.readValue(articleModificationFormDto.getTag(), ArrayList.class);
             for (String tag : tagList) {
@@ -125,6 +138,8 @@ public class CommunityServiceImpl implements CommunityService {
                 map.put("communityId",communityId);
                 communityWriteMapper.insertCommunityTag(map);
             }
+
+
     }
 
 
@@ -132,6 +147,11 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public void updateArticle(ArticleModificationDto articleModificationDto) {
         communityWriteMapper.updateArticle(articleModificationDto);
+    }
+
+    @Override
+    public void updateCommunityImageEnabled(CommunityImageEnabledDto communityImageEnabledDto) {
+        communityWriteMapper.updateCommunityImageEnabled(communityImageEnabledDto);
     }
 
     private CommunityNewDto getCommunity(CommunityNewReqDto communityNewReqDto, Long accountId) {

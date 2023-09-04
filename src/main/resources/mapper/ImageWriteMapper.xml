@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.application.image.mapper.ImageWriteMapper">
+
+    <insert id="insertImage" parameterType="com.example.application.image.dto.ImageDto">
+        INSERT INTO image (newfilename, filename, createdat, communityId)
+        VALUES (#{newFilename}, #{filename}, #{createdAt}, #{communityId})
+    </insert>
+
+    <delete id="deleteImage" parameterType="String">
+        DELETE FROM image
+        WHERE newFilename = #{newFilename}
+    </delete>
+
+</mapper>

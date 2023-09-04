@@ -86,7 +86,8 @@
                     </div>
 
                     <div style="font-weight: bold; font-size: 20px;">
-                        <a th:if="${item.deleted == null}" th:href="@{/article/{id}(id=${item.communityId})}" th:text="${item.title}" style="text-decoration: none; color: black;">제목</a>
+
+                        <a th:if="${item.deleted == null}" th:href="@{/article/{id}(id=${item.communityId})}" th:text="${item.title}" style="text-decoration: none; color: black;">제목</a> <i th:if="${item.imageEnabled && item.deleted == null}" class="far fa-image fa-sm" style="color: #716f6f;"></i>
                         <div th:if="${item.deleted != null}" style="text-decoration: line-through;">삭제된 게시글 입니다.</div>
                     </div>
 

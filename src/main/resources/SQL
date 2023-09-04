@@ -24,6 +24,7 @@ CREATE TABLE Community (
     likes INT DEFAULT 0,
     deleted VARCHAR(45),
     modifiedAt TIMESTAMP,
+    imageEnabled boolean,
     FOREIGN KEY (accountId) REFERENCES Account(accountId)
 );
 
@@ -102,6 +103,13 @@ CREATE TABLE notification (
     checked BOOLEAN,
     accountId BIGINT,
     createdAt TIMESTAMP
+);
+
+id SERIAL PRIMARY KEY,
+    newFilename  VARCHAR(255) NOT NULL,
+    filename VARCHAR(255) NOT NULL,
+    createdAt TIMESTAMP NOT NULL,
+    communityId BIGINT
 );
 
 */
