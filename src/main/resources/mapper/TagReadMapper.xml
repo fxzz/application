@@ -5,7 +5,7 @@
 
 
 
-    <select id="selectTitleCount" parameterType="String" resultType="int">
+    <select id="selectTitleCount" parameterType="String" resultType="Integer">
         SELECT COUNT(*) FROM tag WHERE tagTitle = #{tagTitle}
     </select>
 

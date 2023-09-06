@@ -7,7 +7,7 @@ import java.util.List;
 @Mapper
 public interface TagReadMapper {
 
-   int selectTitleCount(String tagTitle);
+   Integer selectTitleCount(String tagTitle);
    List<String> selectAllTag();
    int selectTagId(String tagTitle);
 }

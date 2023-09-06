@@ -55,7 +55,7 @@ CREATE TABLE Likes (
 
 CREATE TABLE Tag (
     tagId SERIAL PRIMARY KEY,
-    tagTitle VARCHAR(50) NOT NULL
+    tagTitle VARCHAR(50) 
 );
 
 CREATE TABLE CommunityTag (
