@@ -98,7 +98,9 @@
                 contentType: "application/json; charset=utf-8",
                 method: "POST",
                 url: "/tag" + url,
-                data: JSON.stringify({'tagTitle': tagTitle})
+                data: JSON.stringify({
+                    'size': 10
+                })
             }).done(function (data, status) {
                 console.log("${data} and status is ${status}");
             });

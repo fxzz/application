@@ -163,7 +163,7 @@
                                         <td th:text="${item.title}">Title</td>
                                         <td th:text="${item.content}">Content</td>
                                         <td th:text="${item.nickname}">Nickname</td>
-                                        <td th:text="${item.createdAt}">Created At</td>
+                                        <td th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
                                         <td th:text="${item.reportCount}">Report Count</td>
                                         <td>
                                             <form id="deleteForm" th:action="@{'/comment-management/' + ${item.commentId} + '/delete'}" method="post">

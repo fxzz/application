@@ -35,7 +35,11 @@
         WHERE accountId = #{accountId}
     </select>
 
-
+    <select id="selectAccountIdByNickname" parameterType="String" resultType="Long">
+        SELECT accountId
+        FROM account
+        WHERE nickname = #{nickname}
+    </select>
 
 
 </mapper>

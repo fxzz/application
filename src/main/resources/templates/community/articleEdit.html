@@ -48,9 +48,10 @@
                 <br>
 
                 <div class="form-group">
-                    <button class="btn btn-primary btn-block" type="submit">변경</button>
+                    <button class="btn btn-primary btn-block" type="submit">게시글 수정</button>
                 </div>
             </form>
+            <br>
                 <div id="fileList">
                     <ul></ul>
                 </div>
@@ -109,8 +110,8 @@
     function showFiles() {
         let tmp = ``;
         for (file of files) {
-            tmp += `<li><span>${file.filename}</span>
-                        <button id="deleteBtn" onclick="deleteFile('${file.newFilename}')">삭제</button>
+            tmp += `<br><li style="list-style-type: none;"><span>${file.filename}</span>
+                        <button id="deleteBtn" class="btn btn-primary btn-sm" onclick="deleteFile('${file.newFilename}')">삭제</button>
                         </li>`
         }
         $('#fileList ul').html(tmp);

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"></head>
+<body>
+<nav th:replace="fragments.html :: nav"></nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-2"></div>
+
+        <div class="col-8">
+            <div class="card">
+                <div class="card-body">
+                    <svg th:data-jdenticon-value="${nickname}" data-jdenticon-value="user127" width="42" height="42" class="rounded-circle border bg-light"></svg>
+                     <span id="nickname" style="font-weight: bold;" class="card-title" th:text="${nickname}"></span>
+                    <p class="card-text"></p>
+                    <p class="card-text" style="font-weight: bold;">최근 활동한 게시글입니다.</p>
+                </div>
+                <div></div>
+            </div>
+            <div id="pageList">
+                <ul></ul>
+            </div>
+        </div>
+
+        <div class="col-2"></div>
+    </div>
+</div>
+
+
+<script th:replace="fragments.html :: ajax-csrf-header"></script>
+<script type="application/javascript">
+    $(document).ready(function() {
+        var nickname = $('#nickname').text();
+        userPageList(nickname);
+    });
+
+    let pageList = [];
+
+    function userPageList(nickname, communityId) {
+        const cursorRequest = {
+            size: 5,
+            communityId: communityId,
+        };
+        $.ajax({
+            type: "GET",
+            url: `/user/` + nickname +`/activityData`,
+            data: cursorRequest,
+            success: function (result) {
+                pageList = pageList.concat(result.content);
+                showList(result.nextCursorRequest.communityId);
+                lastPageButton(result.nextCursorRequest.communityId);
+            }
+        });
+    };
+
+    function showList(communityId) {
+
+        let tmp = ``;
+        for (page of pageList) {
+            tmp += `<br><li style="list-style-type: none;" class="list-group-item border-bottom">
+                        <span style="font-weight: bold;">글번호: ${page.communityId}</span>
+                        <a href="/article/${page.communityId}" style="text-decoration: none; color: black;">
+                            <div style="font-weight: bold;" >제목: ${page.title}</div>
+                        </a>
+                        <div style="font-weight: bold;">날짜: ${formatDate(page.createdAt)}</div>
+                    </li>`
+        }
+        tmp += `<div hidden id="nextPageId">${communityId}</div>`;
+        tmp += `<br>`;
+
+        tmp += `<a id="listMoreButton">목록 더보기</a>`;
+        tmp += `<div style="display: none" id="lastPage">마지막 글입니다.</div>`;
+
+        $('#pageList ul').html(tmp);
+    }
+
+    $(document).on('click', '#listMoreButton', function() {
+        var communityId = $('#nextPageId').text();
+        var nickname = $('#nickname').text();
+        userPageList(nickname, communityId);
+    });
+
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        return new Date(dateString).toLocaleDateString('ko-KR', options);
+    }
+    
+    function lastPageButton(communityId) {
+        if (communityId == -1) {
+            const element = document.getElementById('listMoreButton');
+            if (element) {
+                element.style.display = 'none';
+            }
+            const last = document.getElementById('lastPage');
+            if (last) {
+                last.style.display = 'block';
+            }
+
+        }
+    }
+
+
+</script>
+
+</body>
+</html>

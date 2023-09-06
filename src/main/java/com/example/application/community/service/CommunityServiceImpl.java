@@ -1,9 +1,8 @@
 package com.example.application.community.service;
 
+import com.example.application.account.mapper.AccountReadMapper;
+import com.example.application.community.dto.*;
 import com.example.application.community.dto.CommunityDto.*;
-import com.example.application.community.dto.CommunityImageEnabledDto;
-import com.example.application.community.dto.PageHandler;
-import com.example.application.community.dto.SearchCondition;
 import com.example.application.community.mapper.CommunityReadMapper;
 import com.example.application.community.mapper.CommunityWriteMapper;
 import com.example.application.image.service.ImageService;
@@ -37,7 +36,39 @@ public class CommunityServiceImpl implements CommunityService {
     private final ObjectMapper objectMapper;
     private final TagService tagService;
     private final ImageService imageService;
+    private final AccountReadMapper accountReadMapper;
 
+    @Transactional(readOnly = true)
+    @Override
+    public CursorResponse<CursorDto> getCursorPage(String nickname, CursorRequest cursorRequest) {
+        Long accountId = accountReadMapper.selectAccountIdByNickname(nickname);
+        return getPageByAccountId(accountId, cursorRequest);
+    }
+
+    // nickname 으로 accountId 커버링 인덱스로 찾고 getAccountPage 호출
+    private CursorResponse<CursorDto> getPageByAccountId(Long accountId, CursorRequest cursorRequest) {
+        List<CursorDto> cursorDtos = selectAllPageByAccountId(accountId, cursorRequest);
+        var nextCommunityId = cursorDtos.stream()
+                .mapToLong(CursorDto::getCommunityId)
+                .min()
+                .orElse(CursorRequest.NONE_communityId);
+        return new CursorResponse<>(cursorRequest.next(nextCommunityId), cursorDtos);
+    }
+
+    private List<CursorDto> selectAllPageByAccountId(Long accountId, CursorRequest cursorRequest) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accountId", accountId);
+        map.put("size", cursorRequest.getSize());
+
+        List<CursorDto> cursorDto;
+        if (cursorRequest.hasCommunityId()) {
+            map.put("communityId", cursorRequest.getCommunityId());
+            cursorDto = communityReadMapper.selectNextPage(map);
+        } else {
+            cursorDto = communityReadMapper.selectFirstPage(map);
+        }
+        return cursorDto;
+    }
 
 
 
