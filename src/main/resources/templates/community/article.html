@@ -21,7 +21,7 @@
                             <svg th:data-jdenticon-value="${articleDto.nickname}" data-jdenticon-value="user127" width="42" height="42" class="rounded-circle border bg-light"></svg>
                         </div>
                         <div>
-                            <span style="font-weight: bold; font-size: 17px;" th:text="${articleDto.nickname}">글쓴이</span> <span><a id="communityReportBtn" style="cursor: pointer; opacity: 0.7; font-size: 90%;">신고</a></span>
+                            <a th:href="'/user/' + ${articleDto.nickname} + '/activity'" style="font-weight: bold; color: black; text-decoration: none; font-size: 17px;" th:text="${articleDto.nickname}">글쓴이</a> <span><a id="communityReportBtn" style="cursor: pointer; opacity: 0.7; font-size: 90%;">신고</a></span>
                             <div style="display: flex; align-items: center; margin-top: 5px;">
 
                                          <span style="color: #918d8d; font-weight: bold;" th:if="${articleDto?.modifiedAt == null}" th:with="startOfDay=${#temporals.createToday().atStartOfDay()}">
@@ -100,7 +100,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div id="commentContainer">
-                            <form>
+
                                 <div class="mb-3">
                                     <div class="d-flex">
                                       <svg th:data-jdenticon-value="${account.nickname}" data-jdenticon-value="user127" width="42" height="42" class="rounded-circle border bg-light"></svg>
@@ -110,7 +110,7 @@
                                 <div class="d-flex justify-content-end">
                                     <button id="commentSubmit" style="font-weight: bold;" class="btn btn-light">작성</button>
                                 </div>
-                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                 <div id="commentRep" class="card" style="display:none">
                     <div class="card-body">
                         <div id="commentContainerRep">
-                            <form>
+
                                 <div class="mb-3">
                                     <div class="d-flex">
                                         <svg th:data-jdenticon-value="${account.nickname}" data-jdenticon-value="user127" width="42" height="42" class="rounded-circle border bg-light"></svg>
@@ -133,7 +133,7 @@
                                 <div class="d-flex justify-content-end">
                                     <button id="commentRepSubmit" style="font-weight: bold;" class="btn btn-light">작성</button>
                                 </div>
-                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -251,9 +251,9 @@
                 tmp += '<svg data-jdenticon-value="' + comment.nickname + '" width="42" height="42" class="rounded-circle border bg-light"></svg>';
                 tmp += '</div>';
                 tmp += '<div>';
-                tmp += '<span style="font-weight: bold; font-size: 17px;">' + comment.nickname + '</span> ';
+                tmp += '<a href="/user/' + comment.nickname + '/activity" style="font-weight: bold; font-size: 17px; color: black; text-decoration: none;">' + comment.nickname + '</a> ';
                 tmp += '<div style="display: flex; align-items: center; ">';
-                tmp += ' <span class="up_date" style="color: #918d8d; font-size: 15px; font-weight: bold;">' + formatDate(comment.createdAt) + '</span>';
+                tmp += '<span class="up_date" style="color: #918d8d; font-size: 15px; font-weight: bold;">' + formatDate(comment.createdAt) + '</span>';
                 tmp += '</div>';
                 tmp += '</div>';
                 tmp += '</div>';
@@ -385,6 +385,7 @@
                     alert(errorMessage);
                 }
             });
+            $("textarea[ID=commentInput]").val('')
         });
 
 

@@ -156,6 +156,13 @@
 
 
 </script>
+<script>
+    document.getElementById("message").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            document.getElementById("send").click();
+        }
+    });
+</script>
 <script th:replace="fragments.html :: ajax-csrf-header"></script>
 <script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
 <script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>

@@ -112,4 +112,6 @@ id SERIAL PRIMARY KEY,
     communityId BIGINT
 );
 
+
+
 */

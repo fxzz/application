@@ -105,5 +105,23 @@
     </select>
 
 
+
+    <select id="selectFirstPage" parameterType="Map" resultType="com.example.application.community.dto.CursorDto">
+        SELECT c.communityId, c.title, c.createdAt
+        FROM community c
+        WHERE c.accountId = #{accountId}
+        ORDER BY c.communityId DESC
+        LIMIT #{size}
+    </select>
+
+    <select id="selectNextPage" parameterType="Map" resultType="com.example.application.community.dto.CursorDto">
+        <![CDATA[
+        SELECT c.communityId, c.title, c.createdAt
+        FROM community c
+        WHERE c.accountId = #{accountId} AND c.communityId < #{communityId}
+        ORDER BY c.communityId DESC
+            LIMIT #{size}
+        ]]>
+    </select>
 </mapper>
 

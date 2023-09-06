@@ -1,10 +1,7 @@
 package com.example.application.community.controller;
 
+import com.example.application.community.dto.*;
 import com.example.application.community.dto.CommunityDto.*;
-import com.example.application.community.dto.CommunityImageEnabledDto;
-import com.example.application.community.dto.PageHandler;
-import com.example.application.community.dto.RankIngLikesDto;
-import com.example.application.community.dto.SearchCondition;
 import com.example.application.community.service.CommunityService;
 import com.example.application.community.service.RankingService;
 import com.example.application.image.dto.ImageDto;
@@ -48,6 +45,17 @@ public class CommunityController {
     @Value("${uploadPath}")
     private String uploadPath;
 
+    @GetMapping("/user/{nickname}/activity")
+    public String getUserActivity(@PathVariable String nickname, Model model) {
+        model.addAttribute("nickname", nickname);
+        return "community/activity";
+    }
+
+    @GetMapping("/user/{nickname}/activityData")
+    @ResponseBody
+    public CursorResponse<CursorDto> getUserActivity(@PathVariable String nickname, @RequestParam(required = false) Long communityId, int size){
+        return communityService.getCursorPage(nickname, new CursorRequest(communityId, size));
+    }
 
     //todo 모든 겟페이지에 모델로 로그인 보내서 프사 고정
 

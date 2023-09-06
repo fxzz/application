@@ -1,10 +1,8 @@
 package com.example.application.community.service;
 
 
+import com.example.application.community.dto.*;
 import com.example.application.community.dto.CommunityDto.*;
-import com.example.application.community.dto.CommunityImageEnabledDto;
-import com.example.application.community.dto.PageHandler;
-import com.example.application.community.dto.SearchCondition;
 import com.example.application.security.UserAccount;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,4 +24,6 @@ public interface CommunityService {
     void modifyArticle(Integer communityId, ArticleModificationFormDto articleModificationFormDto, MultipartFile[] files, String uploadPath) throws IOException;
     void updateArticle(ArticleModificationDto articleModificationDto);
     void updateCommunityImageEnabled(CommunityImageEnabledDto communityImageEnabledDto);
+
+    CursorResponse<CursorDto> getCursorPage(String nickname, CursorRequest cursorRequest);
 }

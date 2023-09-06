@@ -33,7 +33,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.addFilterBefore(bucketFilter, UsernamePasswordAuthenticationFilter.class);
-        http.authorizeRequests().antMatchers("/", "/login" , "/signup", "/community").permitAll()
+        http.authorizeRequests().antMatchers("/", "/login" , "/signup", "/community", "/user/*/activity", "/user/*/activityData").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin()

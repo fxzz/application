@@ -67,7 +67,9 @@
                 <li class="list-group-item border-bottom">
                     <div style="font-weight: bold; font-size: 15px;">
                         <svg th:data-jdenticon-value="${item.nickname}" data-jdenticon-value="user127" width="22" height="22" class="rounded-circle border bg-light"></svg>
-                        <span th:text="${item.nickname}"> 글쓴이</span>
+                        <span>
+                            <a th:href="'/user/' + ${item.nickname} + '/activity'" th:text="${item.nickname}" style="color: black; text-decoration: none;">글쓴이</a>
+                        </span>
 
 
 
