@@ -8,7 +8,7 @@ https://gbapp.fly.dev
 <br>
 fly.io에 배포(초기 구동시간 약 10초 정도 필요)
 
-## ⚙️ 개발 환경
+## ⚙️ 개발 환경 및 기술 세부 스택
 - Java 11
 - Spring Boot 2.7.11
 - MyBatis
@@ -16,6 +16,10 @@ fly.io에 배포(초기 구동시간 약 10초 정도 필요)
 - PostgreSQL
 - Redis
 - Spring Security
+- websocket
+- bucket4j
+  
+  
   
 
 ## 📄 엔티티 관계도
