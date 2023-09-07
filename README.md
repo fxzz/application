@@ -19,7 +19,7 @@ fly.io에 배포(초기 구동시간 약 10초 정도 필요)
   
 
 ## 📄 엔티티 관계도
-
+![postgres - application](https://github.com/fxzz/application/assets/3148006/2850d1f9-ed20-46a6-8b15-ef474a6e63f4)
 
 
 
