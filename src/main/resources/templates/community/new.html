@@ -98,9 +98,7 @@
                 contentType: "application/json; charset=utf-8",
                 method: "POST",
                 url: "/tag" + url,
-                data: JSON.stringify({
-                    'size': 10
-                })
+                data: JSON.stringify({'tagTitle': tagTitle})
             }).done(function (data, status) {
                 console.log("${data} and status is ${status}");
             });
@@ -128,7 +126,7 @@
                 whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
                 maxTags: 3,
                 dropdown: {
-                    maxItems: 15,           // <- mixumum allowed rendered suggestions
+                    maxItems: 10,           // <- mixumum allowed rendered suggestions
                     classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
                     enabled: 0,             // <- show suggestions on focus
                     closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected

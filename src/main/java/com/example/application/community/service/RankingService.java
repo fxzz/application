@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RankingService {
 
+
     @Setter
     @Getter
     private List<RankIngLikesDto> rankIngLikesDtoList;

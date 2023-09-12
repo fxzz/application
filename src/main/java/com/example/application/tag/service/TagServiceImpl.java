@@ -4,11 +4,13 @@ package com.example.application.tag.service;
 import com.example.application.tag.mapper.TagReadMapper;
 import com.example.application.tag.mapper.TagWriteMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Transactional
 @Service
 @RequiredArgsConstructor

@@ -139,6 +139,7 @@ public class CommunityServiceImpl implements CommunityService {
 
 
 
+
     @Transactional(readOnly = true)
     @Override
     public ArticleModificationFormDto getArticleModificationForm(Long communityId, UserAccount userAccount) {
