@@ -9,5 +9,5 @@ public interface TagReadMapper {
 
    Integer selectTitleCount(String tagTitle);
    List<String> selectAllTag();
-   int selectTagId(String tagTitle);
+   Integer selectTagId(String tagTitle);
 }

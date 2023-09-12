@@ -57,9 +57,9 @@
 </head>
 
 <div class="d-flex justify-content-center" th:fragment="communityRank" >
-    <h6 th:if="${rankIngLikesDtoList.size() < 9}">인기 게시글 (집계중)</h6>
+    <h5 th:if="${rankIngLikesDtoList.size() < 9}" style="font-weight: bold;" >인기 게시글 (집계중)</h5>
     <div style="float: left; margin-right: 80px;" th:if="${rankIngLikesDtoList.size() > 9}">
-        <h6>인기 게시글 (레디스에서 1시간 동안 캐싱)</h6>
+        <h5 style="font-weight: bold;">인기 게시글</h5>
         <div th:if="${rankIngLikesDtoList.size() > 0}"><i class="fa-solid fa-1 fa-lg"></i>
             <a th:href="@{/article/{communityId}(communityId=${rankIngLikesDtoList[0].communityId})}"
                th:text="${rankIngLikesDtoList[0].title}" style="color: black; text-decoration: none;"></a>

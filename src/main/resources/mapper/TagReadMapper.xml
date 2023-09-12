@@ -12,14 +12,14 @@
     <select id="selectAllTag" resultMap="tagResultMap">
         SELECT tagTitle FROM tag
         ORDER BY tagId DESC
-            LIMIT 20
+            LIMIT 10
     </select>
     <resultMap id="tagResultMap" type="java.lang.String">
         <result column="tagTitle"/>
     </resultMap>
 
 
-    <select id="selectTagId" parameterType="String" resultType="int">
+    <select id="selectTagId" parameterType="String" resultType="Integer">
         SELECT tagId FROM tag
         WHERE tagTitle = #{tagTitle}
     </select>
