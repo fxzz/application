@@ -4,9 +4,7 @@ import com.example.application.community.dto.*;
 import com.example.application.community.dto.CommunityDto.*;
 import com.example.application.community.service.CommunityService;
 import com.example.application.community.service.RankingService;
-import com.example.application.image.dto.ImageDto;
-import com.example.application.image.mapper.ImageReadMapper;
-import com.example.application.image.service.ImageService;
+import com.example.application.community.service.RankingServiceImpl;
 import com.example.application.security.UserAccount;
 import com.example.application.tag.service.TagService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,8 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,9 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
