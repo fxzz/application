@@ -26,7 +26,7 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
   
 
 ## 📄 엔티티 관계도
-![postgres - application](https://github.com/fxzz/application/assets/3148006/2850d1f9-ed20-46a6-8b15-ef474a6e63f4)
+![postgres - application](https://github.com/fxzz/application/assets/3148006/20ff60d6-25bf-4923-b2e3-eb279e318ed8)
 
 
 
