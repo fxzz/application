@@ -29,15 +29,19 @@ public class SecurityConfig {
     private final DataSource dataSource;
     private final OAuth2UserService oAuth2UserService;
     private final BucketFilter bucketFilter;
+    private final LoginFailureHandler loginFailureHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.addFilterBefore(bucketFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new RecaptchaFilter("/login", ""), UsernamePasswordAuthenticationFilter.class);
         http.authorizeRequests().antMatchers("/", "/login" , "/signup", "/community", "/user/*/activity", "/user/*/activityData").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin()
-                .loginPage("/login").permitAll();
+                .loginPage("/login")
+                .failureHandler(loginFailureHandler)
+                .permitAll();
 
         http.logout().logoutSuccessUrl("/");
 

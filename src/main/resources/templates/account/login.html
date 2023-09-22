@@ -53,7 +53,16 @@
                 </div>
                 <br>
                 <p class="text-center" style="font-size: 14px;">회원이 아니신가요?<a th:href="@{/signup}" style="font-size: 13px;">지금 가입하세요!</a></p>
+
+                <br>
+                <!-- 구글 reCAPTCHA v2 -->
+                <div th:if="${showCaptcha}">
+                    <div class="g-recaptcha" data-sitekey="6LdVZkIoAAAAAHqqBx2hHpwkBIKn_SIVrdrMH25n"></div>
+                    <input type="hidden" name="showCaptcha" value="true" />
+                </div>
+                <br>
             </form>
+
         </div>
 
 
@@ -63,6 +72,12 @@
             </a>
         </div>
 
+
+
+
+
+
+
         <div class="col-4">
 
 
@@ -70,6 +85,10 @@
         </div>
     </div>
 </div>
+
+<script th:replace="fragments.html :: ajax-csrf-header"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 
 </body>
 </html>

@@ -52,7 +52,10 @@ public class AccountController {
 
 
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(@RequestParam(required = false) String captcha, Model model) {
+        if ("true".equals(captcha)) {
+            model.addAttribute("showCaptcha", true);
+        }
         return "account/login";
     }
 

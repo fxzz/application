@@ -105,6 +105,7 @@ CREATE TABLE notification (
     createdAt TIMESTAMP
 );
 
+CREATE TABLE image (
 id SERIAL PRIMARY KEY,
     newFilename  VARCHAR(255) NOT NULL,
     filename VARCHAR(255) NOT NULL,
@@ -112,6 +113,9 @@ id SERIAL PRIMARY KEY,
     communityId BIGINT
 );
 
+CREATE TABLE login_failure (
+   username VARCHAR(255) NOT NULL
+);
 
 
 */
