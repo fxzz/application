@@ -25,16 +25,27 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         setDefaultFailureUrl("/login?error");
-        String username = request.getParameter("username");
+        String username = RequestUtils.getUsernameFromRequest(request);
         if (!username.isEmpty()) {
-            if (accountService.selectUsernameCount(username) > 0) {
+            if (checkUserExistsByUsername(username)) {
                 loginFailureWriteMapper.insertUsernameFailure(username);
             }
         }
 
-        if (loginFailureReadMapper.selectUsernameFailureCount(username) > 5) {
+        if (userLoginFailuresCount(username)) {
             setDefaultFailureUrl("/login?error&captcha=true");
         }
         super.onAuthenticationFailure(request, response, exception);
+    }
+
+
+    private boolean checkUserExistsByUsername(String username) {
+        int count = accountService.selectUsernameCount(username);
+        return count > 0;
+    }
+
+    private boolean userLoginFailuresCount(String username) {
+        int count = loginFailureReadMapper.selectUsernameFailureCount(username);
+        return count > 3;
     }
 }

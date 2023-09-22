@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +34,8 @@ public class AccountController {
     private final AccountSignUpValidator accountSignUpValidator;
     private final AccountService accountService;
 
-
+    @Value("${recaptchaSiteKey}")
+    private String recaptchaSiteKey;
 
     @InitBinder("passwordChangeReqDto")
     public void passwordInitBinder(WebDataBinder webDataBinder) {
@@ -53,6 +55,7 @@ public class AccountController {
 
     @GetMapping("/login")
     public String loginForm(@RequestParam(required = false) String captcha, Model model) {
+        model.addAttribute("recaptchaSiteKey", recaptchaSiteKey);
         if ("true".equals(captcha)) {
             model.addAttribute("showCaptcha", true);
         }

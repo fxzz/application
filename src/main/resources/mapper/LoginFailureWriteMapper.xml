@@ -8,4 +8,9 @@
         VALUES (#{username})
     </insert>
 
+    <delete id="deleteUsernames" parameterType="String">
+        DELETE FROM login_failure
+        WHERE username = #{username};
+    </delete>
+
 </mapper>

@@ -25,6 +25,9 @@
                 <div th:if="${param.error}" >
                     <p style="color: #999;">아이디나 비밀번호가 일치하지 않습니다.</p>
                 </div>
+                <div th:if="${param.captchaFailure}" >
+                    <p style="color: #999;">CAPTCHA 실패. 다시 시도해 주세요.</p>
+                </div>
                 </p>
                 <hr class="my-3">
             </div>
@@ -57,7 +60,7 @@
                 <br>
                 <!-- 구글 reCAPTCHA v2 -->
                 <div th:if="${showCaptcha}">
-                    <div class="g-recaptcha" data-sitekey="6LdVZkIoAAAAAHqqBx2hHpwkBIKn_SIVrdrMH25n"></div>
+                    <div class="g-recaptcha" th:data-sitekey="${recaptchaSiteKey}"></div>
                     <input type="hidden" name="showCaptcha" value="true" />
                 </div>
                 <br>
