@@ -33,6 +33,7 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 ## use-case
 
-![hh drawio](https://github.com/fxzz/application/assets/3148006/28d6c05f-ad49-4d95-b5ca-8be35e276491)
+![Usecase Diagram](https://github.com/fxzz/application/assets/3148006/1fd6bfe4-6866-4da7-8b39-cbeee3acf3bd)
 
-https://github.com/fxzz/application/blob/main/hh.drawio.png
+
+https://github.com/fxzz/application/blob/main/Usecase%20Diagram.png
