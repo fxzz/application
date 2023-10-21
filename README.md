@@ -37,3 +37,5 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 
 https://github.com/fxzz/application/blob/main/Usecase%20Diagram.png
+
+게시글 삭제 수정 추가 해야하고 파일 업로드 방식이 바뀜
