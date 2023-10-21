@@ -29,7 +29,6 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public void saveAccount(AccountSignUpReqDto accountSignUpReqDto) {
-
         var account = accountSignUpReqDto.toAccount();
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         accountWriteMapper.insertAccount(account);

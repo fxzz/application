@@ -14,15 +14,14 @@ import java.util.Map;
 
 public interface CommunityService {
 
-    void saveCommunity(CommunityNewReqDto communityNewReqDto, Long accountId, MultipartFile[] files, String uploadPath) throws IOException;
-    List<CommunityTagResultDto> CommunityTagPagedLimitByKeyword(SearchCondition searchCondition);
+    void saveCommunity(CommunityNewReqDto communityNewReqDto, Long accountId, MultipartFile[] files, String uploadPath);
+    List<CommunityTagResultDto> getCommunityAll(SearchCondition searchCondition);
     PageHandler createPageHandler(SearchCondition searchCondition);
     ArticleDto getArticleById(Long communityId);
     void deleteArticleAction(Long communityId, Long accountId);
     void updateArticleView(Long communityId);
-    ArticleModificationFormDto getArticleModificationForm(Long communityId, UserAccount userAccount);
-    void modifyArticle(Integer communityId, ArticleModificationFormDto articleModificationFormDto, MultipartFile[] files, String uploadPath) throws IOException;
-    void updateArticle(ArticleModificationDto articleModificationDto);
+    ArticleModificationFormDto getArticleModifyForm(Long communityId, UserAccount userAccount);
+    void modifyArticle(Integer communityId, ArticleModificationFormDto articleModificationFormDto, MultipartFile[] files, String uploadPath);
     void updateCommunityImageEnabled(CommunityImageEnabledDto communityImageEnabledDto);
 
     CursorResponse<CursorDto> getCursorPage(String nickname, CursorRequest cursorRequest);

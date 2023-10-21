@@ -60,7 +60,7 @@ public class CommunityController {
 
     @GetMapping("/community")
     public String community(Model model, SearchCondition searchCondition, @AuthenticationPrincipal UserAccount userAccount) {
-        List<CommunityTagResultDto> communityTagResultDto  = communityService.CommunityTagPagedLimitByKeyword(searchCondition);
+        List<CommunityTagResultDto> communityTagResultDto  = communityService.getCommunityAll(searchCondition);
         PageHandler ph = communityService.createPageHandler(searchCondition);
         model.addAttribute("communityTagResultDto", communityTagResultDto);
         model.addAttribute("ph", ph);
@@ -78,7 +78,7 @@ public class CommunityController {
     }
 
     @PostMapping("/community/new")
-    public String communityNew(@Valid CommunityNewReqDto communityNewReqDto, BindingResult bindingResult, MultipartFile[] files, @AuthenticationPrincipal UserAccount userAccount, Model model, RedirectAttributes attributes) throws IOException {
+    public String communityNew(@Valid CommunityNewReqDto communityNewReqDto, BindingResult bindingResult, MultipartFile[] files, @AuthenticationPrincipal UserAccount userAccount, Model model, RedirectAttributes attributes) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("titleError", bindingResult.getFieldError("title") != null ? bindingResult.getFieldError("title").getDefaultMessage() : null);
             model.addAttribute("contentError", bindingResult.getFieldError("content") != null ? bindingResult.getFieldError("content").getDefaultMessage() : null);
@@ -114,14 +114,14 @@ public class CommunityController {
 
     @GetMapping("/articles/{communityId}/modify")
     public String articleModifyForm(@PathVariable Long communityId, @AuthenticationPrincipal UserAccount userAccount, Model model) throws JsonProcessingException {
-        ArticleModificationFormDto articleModificationFormDto = communityService.getArticleModificationForm(communityId, userAccount);
+        ArticleModificationFormDto articleModificationFormDto = communityService.getArticleModifyForm(communityId, userAccount);
         model.addAttribute("articleModificationFormDto", articleModificationFormDto);
         model.addAttribute("whitelist", objectMapper.writeValueAsString(tagService.selectAllTag()));
         return "community/articleEdit";
     }
 
     @PostMapping("/articles/{communityId}/modify")
-    public String articleModify(@PathVariable Integer communityId, MultipartFile[] files, @Valid ArticleModificationFormDto articleModificationFormDto, BindingResult bindingResult, Model model, RedirectAttributes attributes) throws IOException {
+    public String articleModify(@PathVariable Integer communityId, MultipartFile[] files, @Valid ArticleModificationFormDto articleModificationFormDto, BindingResult bindingResult, Model model, RedirectAttributes attributes) throws JsonProcessingException {
        if (bindingResult.hasErrors()) {
            model.addAttribute("articleModificationFormDto", articleModificationFormDto);
            model.addAttribute("whitelist", objectMapper.writeValueAsString(tagService.selectAllTag()));
