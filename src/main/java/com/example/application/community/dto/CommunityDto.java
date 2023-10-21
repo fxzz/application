@@ -1,5 +1,6 @@
 package com.example.application.community.dto;
 
+import com.example.application.util.exception.CommunityIdValidationException;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -26,7 +27,6 @@ public class CommunityDto  {
     }
 
     @Builder
-    @Setter
     @Getter
     public static class CommunityNewDto {
 
@@ -34,6 +34,14 @@ public class CommunityDto  {
         private String content;
         private Long accountId;
         private Integer communityId;
+
+        public static CommunityNewDto createNewCommunity(CommunityNewReqDto communityNewReqDto, Long accountId) {
+            return CommunityNewDto.builder()
+                    .title(communityNewReqDto.getTitle())
+                    .content(communityNewReqDto.getContent())
+                    .accountId(accountId)
+                    .build();
+        }
     }
 
 
@@ -69,6 +77,8 @@ public class CommunityDto  {
         private Long likes;
         private List<String> tagTitle;
         private LocalDateTime modifiedAt;
+
+
     }
 
     @ToString
@@ -91,11 +101,19 @@ public class CommunityDto  {
 
     @Builder
     @Getter
-    @Setter
     public static class ArticleModificationDto {
         private Long communityId;
         private String title;
         private String content;
         private LocalDateTime modifiedAt;
+
+        public static ArticleModificationDto updateArticleModificationDto(ArticleModificationFormDto articleModificationFormDto) {
+            return ArticleModificationDto.builder()
+                    .communityId(articleModificationFormDto.getCommunityId())
+                    .title(articleModificationFormDto.getTitle())
+                    .content(articleModificationFormDto.getContent())
+                    .modifiedAt(LocalDateTime.now())
+                    .build();
+        }
     }
 }

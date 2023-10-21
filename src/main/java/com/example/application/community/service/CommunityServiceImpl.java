@@ -1,25 +1,23 @@
 package com.example.application.community.service;
 
 import com.example.application.account.mapper.AccountReadMapper;
-import com.example.application.community.dto.*;
 import com.example.application.community.dto.CommunityDto.*;
+import com.example.application.community.dto.*;
 import com.example.application.community.mapper.CommunityReadMapper;
 import com.example.application.community.mapper.CommunityWriteMapper;
-import com.example.application.image.service.ImageService;
 import com.example.application.security.UserAccount;
 import com.example.application.tag.service.TagService;
-import com.example.application.util.exception.InvalidAccessOperationException;
+import com.example.application.util.exception.CommunityIdValidationException;
+import com.example.application.util.exception.UnauthorizedAccessException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +33,94 @@ public class CommunityServiceImpl implements CommunityService {
     private final CommunityReadMapper communityReadMapper;
     private final ObjectMapper objectMapper;
     private final TagService tagService;
-    private final ImageService imageService;
     private final AccountReadMapper accountReadMapper;
+    private final ApplicationEventPublisher eventPublisher;
+
+
+
+
+    @Override
+    public void saveCommunity(CommunityNewReqDto communityNewReqDto, Long accountId, MultipartFile[] files, String uploadPath) {
+        CommunityNewDto communityNewDto = createCommunity(communityNewReqDto, accountId);
+
+        if (files != null) {
+            eventPublisher.publishEvent(FileUploadEvent.createEvent(files, communityNewDto.getCommunityId().longValue(), uploadPath));
+        }
+
+        addTag(communityNewReqDto.getTag(), communityNewDto.getCommunityId());
+    }
+
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<CommunityTagResultDto> getCommunityAll(SearchCondition searchCondition) {
+        return communityReadMapper.selectAllCommunityTag(searchCondition);
+    }
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public PageHandler createPageHandler(SearchCondition searchCondition) {
+        int totalCnt = communityReadMapper.searchResultCnt(searchCondition);
+        return new PageHandler(totalCnt, searchCondition);
+    }
+
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public ArticleDto getArticleById(Long communityId) {
+
+        ArticleDto articleDto = communityReadMapper.selectCommunityByCommunityId(communityId);
+
+        if (articleDto == null) {
+         throw new CommunityIdValidationException("communityId is null");
+        }
+
+        return articleDto;
+    }
+
+
+
+    @Override
+    public void deleteArticleAction(Long communityId, Long accountId) {
+        deleteArticle(communityId, accountId);
+        communityWriteMapper.deleteCommunityTagsByCommunityId(communityId);
+    }
+
+
+
+    @Override
+    public void updateArticleView(Long communityId) {
+        communityWriteMapper.updateArticleView(communityId);
+    }
+
+
+
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public ArticleModificationFormDto getArticleModifyForm(Long communityId, UserAccount userAccount) {
+        return loadArticleData(communityId, userAccount);
+    }
+
+
+    @Override
+    public void modifyArticle(Integer communityId, ArticleModificationFormDto articleModificationFormDto, MultipartFile[] files, String uploadPath) {
+        updateArticle(articleModificationFormDto);
+
+        communityWriteMapper.deleteCommunityTagsByCommunityId(articleModificationFormDto.getCommunityId());
+
+        if (files != null) {
+            eventPublisher.publishEvent(FileUploadEvent.createEvent(files, communityId.longValue(), uploadPath));
+        }
+
+        addTag(articleModificationFormDto.getTag(), communityId);
+
+
+    }
 
     @Transactional(readOnly = true)
     @Override
@@ -71,137 +155,68 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
 
-
-    @Override
-    public void saveCommunity(CommunityNewReqDto communityNewReqDto, Long accountId, MultipartFile[] files, String uploadPath) throws IOException {
-        CommunityNewDto communityNewDto = getCommunity(communityNewReqDto, accountId);
-
-        communityWriteMapper.insertCommunity(communityNewDto);
-
-
-        if (files != null) {
-            imageService.uploadFile(files, communityNewDto.getCommunityId().longValue(), uploadPath);
-        }
-
-            List<String> tagList = objectMapper.readValue(communityNewReqDto.getTag(), ArrayList.class);
-            for (String tag : tagList) {
-              int tagId = tagService.selectTagId(tag);
-              Map<String, Integer> map = new HashMap<>();
-              map.put("tagId", tagId);
-              map.put("communityId",communityNewDto.getCommunityId());
-                communityWriteMapper.insertCommunityTag(map);
-                log.info("communityId : {}", communityNewDto.getCommunityId());
-            }
-    }
-
-
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<CommunityTagResultDto> CommunityTagPagedLimitByKeyword(SearchCondition searchCondition) {
-
-        return communityReadMapper.selectAllCommunityTag(searchCondition);
-    }
-
-
-    @Transactional(readOnly = true)
-    @Override
-    public PageHandler createPageHandler(SearchCondition searchCondition) {
-        int totalCnt = communityReadMapper.searchResultCnt(searchCondition);
-        return new PageHandler(totalCnt, searchCondition);
-    }
-
-
-
-    @Transactional(readOnly = true)
-    @Override
-    public ArticleDto getArticleById(Long communityId) {
-        return communityReadMapper.selectCommunityByCommunityId(communityId);
-    }
-
-
-
-    @Override
-    public void deleteArticleAction(Long communityId, Long accountId) {
-        Map<String, Long> map = new HashMap<>();
-        map.put("communityId", communityId);
-        map.put("accountId", accountId);
-        communityWriteMapper.deleteCommunityTagsByCommunityId(communityId);
-        communityWriteMapper.deleteArticle(map);
-    }
-
-
-    @Override
-    public void updateArticleView(Long communityId) {
-        communityWriteMapper.updateArticleView(communityId);
-    }
-
-
-
-
-
-    @Transactional(readOnly = true)
-    @Override
-    public ArticleModificationFormDto getArticleModificationForm(Long communityId, UserAccount userAccount) {
-        ArticleModificationFormDto articleModificationFormDto = communityReadMapper.selectArticleUpdateByCommunityId(communityId);
-        if (!articleModificationFormDto.getAccountId().equals(userAccount.accountId())) {
-            throw new InvalidAccessOperationException("잘못된 접근입니다.");
-        }
-
-        return articleModificationFormDto;
-    }
-
-    @Override
-    public void modifyArticle(Integer communityId, ArticleModificationFormDto articleModificationFormDto, MultipartFile[] files, String uploadPath) throws IOException {
-        ArticleModificationDto articleModificationDto = getArticleModificationDto(articleModificationFormDto);
-
-        communityWriteMapper.deleteCommunityTagsByCommunityId(articleModificationFormDto.getCommunityId());
-        updateArticle(articleModificationDto);
-
-        if (files != null) {
-            imageService.uploadFile(files, communityId.longValue(), uploadPath);
-        }
-
-            List<String> tagList = objectMapper.readValue(articleModificationFormDto.getTag(), ArrayList.class);
-            for (String tag : tagList) {
-                int tagId = tagService.selectTagId(tag);
-                Map<String, Integer> map = new HashMap<>();
-                map.put("tagId", tagId);
-                map.put("communityId",communityId);
-                communityWriteMapper.insertCommunityTag(map);
-            }
-
-
-    }
-
-
-
-    @Override
-    public void updateArticle(ArticleModificationDto articleModificationDto) {
-        communityWriteMapper.updateArticle(articleModificationDto);
-    }
-
     @Override
     public void updateCommunityImageEnabled(CommunityImageEnabledDto communityImageEnabledDto) {
         communityWriteMapper.updateCommunityImageEnabled(communityImageEnabledDto);
     }
 
-    private CommunityNewDto getCommunity(CommunityNewReqDto communityNewReqDto, Long accountId) {
-        CommunityNewDto communityNewDto = CommunityNewDto.builder()
-                .title(communityNewReqDto.getTitle())
-                .content(communityNewReqDto.getContent())
-                .accountId(accountId)
-                .build();
+
+
+
+
+
+
+
+
+
+    private void addTag(String tags, Integer communityId) {
+        List<String> tagList = null;
+        try {
+            tagList = objectMapper.readValue(tags, ArrayList.class);
+        } catch (JsonProcessingException e) {
+            log.error("Tag parsing ERROR: {}", e.getMessage());
+        }
+
+        if (tagList != null) {
+            for (String tag : tagList) {
+                int tagId = tagService.selectTagId(tag);
+                insertTag(communityId, tagId);
+            }
+        }
+    }
+
+    private void insertTag(Integer communityId, int tagId) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("tagId", tagId);
+        map.put("communityId",communityId);
+        communityWriteMapper.insertCommunityTag(map);
+    }
+
+
+
+    private void updateArticle(ArticleModificationFormDto articleModificationFormDto) {
+        ArticleModificationDto articleModificationDto = ArticleModificationDto.updateArticleModificationDto(articleModificationFormDto);
+        communityWriteMapper.updateArticle(articleModificationDto);
+    }
+
+    private CommunityNewDto createCommunity(CommunityNewReqDto communityNewReqDto, Long accountId) {
+        CommunityNewDto communityNewDto = CommunityNewDto.createNewCommunity(communityNewReqDto, accountId);
+        communityWriteMapper.insertCommunity(communityNewDto);
         return communityNewDto;
     }
 
-    private ArticleModificationDto getArticleModificationDto(ArticleModificationFormDto articleModificationFormDto) {
-        ArticleModificationDto articleModificationDto = ArticleModificationDto.builder()
-                                       .communityId(articleModificationFormDto.getCommunityId())
-                                       .title(articleModificationFormDto.getTitle())
-                                       .content(articleModificationFormDto.getContent())
-                                       .modifiedAt(LocalDateTime.now())
-                                       .build();
-        return articleModificationDto;
+    private void deleteArticle(Long communityId, Long accountId) {
+        Map<String, Long> map = new HashMap<>();
+        map.put("communityId", communityId);
+        map.put("accountId", accountId);
+        communityWriteMapper.deleteArticle(map);
+    }
+
+    private ArticleModificationFormDto loadArticleData(Long communityId, UserAccount userAccount) {
+        ArticleModificationFormDto articleModificationFormDto = communityReadMapper.selectArticleUpdateByCommunityId(communityId);
+        if (!articleModificationFormDto.getAccountId().equals(userAccount.accountId())) {
+            throw new UnauthorizedAccessException("잘못된 접근입니다.");
+        }
+        return articleModificationFormDto;
     }
 }

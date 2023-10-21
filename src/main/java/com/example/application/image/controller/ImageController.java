@@ -49,7 +49,6 @@ public class ImageController {
     @GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
     public ResponseEntity<Resource> downloadFile(String filename) {
-        System.out.println("filename = " + filename);
         Resource resource = new FileSystemResource(uploadPath + filename);
 
         return new ResponseEntity<>(resource, HttpStatus.OK);
