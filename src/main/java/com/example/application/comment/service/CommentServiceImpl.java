@@ -30,11 +30,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void createComment(InsertCommentDto insertCommentDto, UserAccount userAccount) {
-        insertCommentDto.setAccountId(userAccount.accountId());
-        commentWriteMapper.insertComment(insertCommentDto);
-        communityWriteMapper.updateCommentCnt(insertCommentDto.getCommunityId());
+        saveComment(insertCommentDto, userAccount);
         eventPublisher.publishEvent(new CommentCreatedEvent(insertCommentDto));
     }
+
 
 
     @Transactional(readOnly = true)
@@ -45,14 +44,26 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void createReplayComment(InsertReplyDto insertReplyDto, UserAccount userAccount) {
-        insertReplyDto.setAccountId(userAccount.accountId());
-        commentWriteMapper.insertReply(insertReplyDto);
-        communityWriteMapper.updateCommentCnt(insertReplyDto.getCommunityId());
+        saveReplayComment(insertReplyDto, userAccount);
     }
+
 
     @Override
     public void removeComment(DeleteCommentDto deleteCommentDto) {
         commentWriteMapper.deleteComment(deleteCommentDto);
     }
 
+
+
+    private void saveComment(InsertCommentDto insertCommentDto, UserAccount userAccount) {
+        insertCommentDto.setAccountId(userAccount.accountId());
+        commentWriteMapper.insertComment(insertCommentDto);
+        communityWriteMapper.updateCommentCnt(insertCommentDto.getCommunityId());
+    }
+
+    private void saveReplayComment(InsertReplyDto insertReplyDto, UserAccount userAccount) {
+        insertReplyDto.setAccountId(userAccount.accountId());
+        commentWriteMapper.insertReply(insertReplyDto);
+        communityWriteMapper.updateCommentCnt(insertReplyDto.getCommunityId());
+    }
 }

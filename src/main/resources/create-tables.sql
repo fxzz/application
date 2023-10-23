@@ -1,4 +1,3 @@
-/*
 
 CREATE TABLE Account (
     accountId SERIAL PRIMARY KEY,
@@ -116,6 +115,3 @@ id SERIAL PRIMARY KEY,
 CREATE TABLE login_failure (
    username VARCHAR(255) NOT NULL
 );
-
-
-*/

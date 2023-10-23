@@ -29,10 +29,9 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public void saveAccount(AccountSignUpReqDto accountSignUpReqDto) {
-        var account = accountSignUpReqDto.toAccount();
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-        accountWriteMapper.insertAccount(account);
+        insertAccount(accountSignUpReqDto);
     }
+
 
 
     @Override
@@ -67,24 +66,17 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public void saveProfile(AccountProfileRespDto accountProfileRespDto, Long accountId) {
-        Map<String, Object> accountData = new HashMap<>();
-        accountData.put("fullName", accountProfileRespDto.getFullName());
-        accountData.put("nickname", accountProfileRespDto.getNickname());
-        accountData.put("accountId", accountId);
-        accountWriteMapper.updateProfile(accountData);
+        updateProfile(accountProfileRespDto, accountId);
     }
+
 
 
     @Transactional
     @Override
     public void passwordChange(Account account, PasswordChangeReqDto passwordChangeReqDto) {
-        if (passwordEncoder.matches(passwordChangeReqDto.getPassword(), account.getPassword())) {
-            account.setPassword(passwordEncoder.encode(passwordChangeReqDto.getNewPassword()));
-            accountWriteMapper.updatePassword(account);
-        }else {
-            throw new PasswordMismatchException("현재 패스워드가 일치하지 않습니다.");
-        }
+        updatePassword(account, passwordChangeReqDto);
     }
+
 
     @Transactional
     @Override
@@ -97,5 +89,28 @@ public class AccountServiceImpl implements AccountService {
         return accountReadMapper.selectNotificationEnabled(accountId);
     }
 
+
+    private void updatePassword(Account account, PasswordChangeReqDto passwordChangeReqDto) {
+        if (passwordEncoder.matches(passwordChangeReqDto.getPassword(), account.getPassword())) {
+            account.setPassword(passwordEncoder.encode(passwordChangeReqDto.getNewPassword()));
+            accountWriteMapper.updatePassword(account);
+        }else {
+            throw new PasswordMismatchException("현재 패스워드가 일치하지 않습니다.");
+        }
+    }
+
+    private void updateProfile(AccountProfileRespDto accountProfileRespDto, Long accountId) {
+        Map<String, Object> accountData = new HashMap<>();
+        accountData.put("fullName", accountProfileRespDto.getFullName());
+        accountData.put("nickname", accountProfileRespDto.getNickname());
+        accountData.put("accountId", accountId);
+        accountWriteMapper.updateProfile(accountData);
+    }
+
+    private void insertAccount(AccountSignUpReqDto accountSignUpReqDto) {
+        var account = accountSignUpReqDto.toAccount();
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        accountWriteMapper.insertAccount(account);
+    }
 
 }

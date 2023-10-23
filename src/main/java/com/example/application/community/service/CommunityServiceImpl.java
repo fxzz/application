@@ -72,11 +72,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public ArticleDto getArticleById(Long communityId) {
 
-        ArticleDto articleDto = communityReadMapper.selectCommunityByCommunityId(communityId);
-
-        if (articleDto == null) {
-         throw new CommunityIdValidationException("communityId is null");
-        }
+        ArticleDto articleDto = getArticle(communityId);
 
         return articleDto;
     }
@@ -219,4 +215,14 @@ public class CommunityServiceImpl implements CommunityService {
         }
         return articleModificationFormDto;
     }
+
+    private ArticleDto getArticle(Long communityId) {
+        ArticleDto articleDto = communityReadMapper.selectCommunityByCommunityId(communityId);
+
+        if (articleDto == null) {
+         throw new CommunityIdValidationException("communityId is null");
+        }
+        return articleDto;
+    }
+
 }
