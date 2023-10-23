@@ -11,5 +11,12 @@
         WHERE communityId = #{communityId}
     </select>
 
+    <select id="selectUserExists" parameterType="Long" resultType="com.example.application.likes.dto.LikesDto">
+        SELECT communityId, accountId
+        FROM likes
+        WHERE communityId = #{communityId} AND accountId = #{accountId}
+    </select>
+
+
 
 </mapper>

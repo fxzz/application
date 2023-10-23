@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.application.report.mapper.CommentReportReadMapper">
+
+    <select id="selectUserExists" parameterType="Long" resultType="com.example.application.report.dto.CommentReportDto">
+        SELECT commentId, accountId
+        FROM comment_report_history
+        WHERE commentId = #{commentId} AND accountId = #{accountId}
+    </select>
+
+</mapper>

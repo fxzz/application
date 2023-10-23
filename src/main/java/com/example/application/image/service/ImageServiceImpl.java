@@ -56,7 +56,7 @@ public class ImageServiceImpl implements ImageService {
                 } else {
                     // 허용되지 않은 확장자인 경우 에러 처리 혹은 무시
                     System.out.println("허용되지 않은 파일 확장자: " + fileExtension);
-                    //todo : 나중에 익셉션 날려서 받기
+                    //todo : 어떻게 처리할지 고민중
                 }
             }
         }

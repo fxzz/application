@@ -30,13 +30,29 @@ public class LikesServiceImpl implements LikesService {
     @Transactional
     @Override
     public void insertLikes(LikesDto likesDto, UserAccount userAccount) {
-        likesDto.setAccountId(userAccount.accountId());
-        likesWriteMapper.insertLikes(likesDto);
-        communityLikesUpdate(likesDto);
+        likesValid(likesDto, userAccount);
 
+        saveLikes(likesDto, userAccount);
     }
 
-    private void communityLikesUpdate(LikesDto likesDto) {
+
+
+
+    private void likesValid(LikesDto likesDto, UserAccount userAccount) {
+        LikesDto likes = likesReadMapper.selectUserExists(likesDto.getCommunityId(), userAccount.accountId());
+        if (likes != null) {
+            likes.likesValid();
+        }
+    }
+
+
+    private void saveLikes(LikesDto likesDto, UserAccount userAccount) {
+        likesDto.setAccountId(userAccount.accountId());
+        likesWriteMapper.insertLikes(likesDto);
+        updateCommunityLikesCount(likesDto);
+    }
+
+    private void updateCommunityLikesCount(LikesDto likesDto) {
         Long likesCount = likesReadMapper.selectLikesCount(likesDto.getCommunityId());
         Map map = new HashMap();
         map.put("communityId", likesDto.getCommunityId());
