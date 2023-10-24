@@ -20,6 +20,7 @@ public interface CommunityReadMapper {
 
     List<CursorDto> selectFirstPage(Map<String, Object> map);
     List<CursorDto> selectNextPage(Map<String, Object> map);
+    Long selectCommunityIdByAccountId(Long accountId);
 
 
 }
