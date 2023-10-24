@@ -123,5 +123,11 @@
             LIMIT #{size}
         ]]>
     </select>
+
+    <select id="selectCommunityIdByAccountId" parameterType="Long" resultType="Long">
+        SELECT communityId
+        FROM community
+        WHERE accountId = #{accountId}
+    </select>
 </mapper>
 

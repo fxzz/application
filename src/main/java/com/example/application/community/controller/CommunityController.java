@@ -1,5 +1,6 @@
 package com.example.application.community.controller;
 
+import com.example.application.account.service.AccountService;
 import com.example.application.community.dto.*;
 import com.example.application.community.dto.CommunityDto.*;
 import com.example.application.community.service.CommunityService;
@@ -35,23 +36,29 @@ public class CommunityController {
     private final TagService tagService;
     private final ObjectMapper objectMapper;
     private final RankingService rankingService;
+    private final AccountService accountService;
+
+    private final int USER_NOT_FOUND_CODE = 0;
 
     @Value("${uploadPath}")
     private String uploadPath;
 
     @GetMapping("/user/{nickname}/activity")
     public String getUserActivity(@PathVariable String nickname, Model model) {
+        if (accountService.selectNicknameCount(nickname) == USER_NOT_FOUND_CODE) {
+            return "redirect:/community";
+        }
         model.addAttribute("nickname", nickname);
         return "community/activity";
     }
 
     @GetMapping("/user/{nickname}/activityData")
     @ResponseBody
-    public CursorResponse<CursorDto> getUserActivity(@PathVariable String nickname, @RequestParam(required = false) Long communityId, int size){
+    public CursorResponse<CursorDto> getUserActivityData(@PathVariable String nickname, @RequestParam(required = false) Long communityId, int size){
         return communityService.getCursorPage(nickname, new CursorRequest(communityId, size));
     }
 
-    //todo 모든 겟페이지에 모델로 로그인 보내서 프사 고정
+
 
     @GetMapping("/")
     public String main() {
@@ -91,7 +98,7 @@ public class CommunityController {
     }
 
 
-    @GetMapping("article/{communityId}")
+    @GetMapping("/article/{communityId}")
     public String article(@PathVariable Long communityId, Model model, @AuthenticationPrincipal UserAccount userAccount) {
         ArticleDto articleDto = communityService.getArticleById(communityId);
         communityService.updateArticleView(communityId);
