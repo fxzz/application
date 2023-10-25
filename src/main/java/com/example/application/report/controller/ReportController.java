@@ -18,13 +18,13 @@ public class ReportController {
     @PostMapping("/report/community/{communityId}")
     public ResponseEntity<String> reportCommunity(@PathVariable Long communityId, @AuthenticationPrincipal UserAccount userAccount) {
         reportService.reportCommunity(communityId, userAccount.accountId());
-        return ResponseEntity.ok("OK.");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/report/comment/{commentId}")
     public ResponseEntity<String> reportComment(@PathVariable Long commentId, @AuthenticationPrincipal UserAccount userAccount) {
         reportService.reportComment(commentId, userAccount.accountId());
-        return ResponseEntity.ok("OK.");
+        return ResponseEntity.ok().build();
     }
 
 }

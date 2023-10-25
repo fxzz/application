@@ -122,7 +122,7 @@
         var input = document.querySelector('input[name="tags"]'),
             // init Tagify script on the above inputs
             tagify = new Tagify(input, {
-                pattern: /^.{0,15}$/,
+                pattern: /^[가-힣ㄱ-ㅎㅏ-ㅣA-Za-z0-9]{1,15}$/,
                 whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
                 maxTags: 3,
                 dropdown: {

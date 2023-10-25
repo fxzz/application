@@ -1,5 +1,6 @@
 package com.example.application.report.dto;
 
+import com.example.application.util.exception.CustomApiException;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -11,7 +12,12 @@ public class CommentReportDto {
 
     public void reportValid() {
         if (this.commentId != null && this.accountId != null) {
-            throw new RuntimeException(this.commentId + "신고를 중복으로 눌렀습니다." + this.accountId);
+
+            if (this.commentId < 0 || this.accountId < 0) {
+                throw new CustomApiException("communityId 또는 accountId가 존재하지 않습니다.");
+            }
+
+            throw new CustomApiException(this.commentId + "중복된 신고 입니다." + this.accountId);
         }
     }
 }
