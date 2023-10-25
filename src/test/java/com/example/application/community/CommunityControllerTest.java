@@ -224,7 +224,7 @@ public class CommunityControllerTest {
 
 
     @WithAccount("sdsdsd")
-    @DisplayName("특정 유저의 썼던 글 목록으로 이동")
+    @DisplayName("특정 유저의 썼던 글을 커서 페이징으로 불러옴")
     @Test
     void selectUserActivityData() throws Exception {
         Long accountId = accountReadMapper.selectAccountIdByNickname("sdsdsd");
