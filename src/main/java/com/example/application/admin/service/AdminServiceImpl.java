@@ -1,21 +1,31 @@
 package com.example.application.admin.service;
 
+import com.example.application.account.dto.Account;
 import com.example.application.admin.dto.*;
 import com.example.application.admin.mapper.AdminMapper;
 
 
+import com.example.application.security.UserAccount;
+import com.example.application.util.SessionUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AdminServiceImpl implements AdminService {
 
     private final AdminMapper adminMapper;
+    private final SessionRegistry sessionRegistry;
 
     @Transactional(readOnly = true)
     @Override
@@ -70,6 +80,15 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void removeCommentManagement(Long commentId) {
         adminMapper.deleteCommentManagement(commentId);
+    }
+
+    @Transactional
+    @Override
+    public void blockAccount(String nickname) {
+        adminMapper.blockAccount(nickname);
+
+        SessionUtils.expireSessionsByNickname(nickname, sessionRegistry);
+
     }
 
 

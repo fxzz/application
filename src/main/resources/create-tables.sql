@@ -115,3 +115,6 @@ id SERIAL PRIMARY KEY,
 CREATE TABLE login_failure (
    username VARCHAR(255) NOT NULL
 );
+
+ALTER table likes
+ADD column batch_status BOOLEAN DEFAULT FALSE

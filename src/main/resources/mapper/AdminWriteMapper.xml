@@ -13,5 +13,10 @@
     SET deleted = 1
     WHERE commentId = #{commentId}
 </delete>
+<update id="blockAccount" parameterType="String">
+    UPDATE account
+    SET role = 'BANNED_USER'
+    WHERE nickname = #{nickname}
+</update>
 
 </mapper>

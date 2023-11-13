@@ -20,4 +20,5 @@ public interface AdminMapper {
     WeeklyAccountCountsDto selectWeeklyAccountCounts();
     void deleteCommunityManagement(Long communityId);
     void deleteCommentManagement(Long commentId);
+    void blockAccount(String nickname);
 }
