@@ -13,4 +13,5 @@ public interface AdminService {
     WeeklyAccountCountsDto getWeeklyAccountCounts();
     void removeCommunityManagement(Long communityId);
     void removeCommentManagement(Long commentId);
+    void blockAccount(String nickname);
 }

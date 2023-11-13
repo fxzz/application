@@ -31,9 +31,10 @@ public class Account implements Serializable {
     @Getter
     @RequiredArgsConstructor
     public enum Role {
-        ADMIN("어드민"), USER("유저");
+        ADMIN("어드민"), USER("유저"), BANNED_USER("차단된 유저");
 
         private final String description;
+
     }
 }
 

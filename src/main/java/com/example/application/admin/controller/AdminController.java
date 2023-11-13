@@ -64,4 +64,15 @@ public class AdminController {
         adminService.removeCommentManagement(commentId);
         return "redirect:/comment-management";
     }
+
+    @PostMapping("/community-management/{nickname}/block")
+    public String blockAccountManagement(@PathVariable String nickname) {
+        adminService.blockAccount(nickname);
+        return "redirect:/community-management";
+    }
+
+    @GetMapping("/block")
+    public String blockAccount() {
+        return "block";
+    }
 }

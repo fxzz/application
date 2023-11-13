@@ -155,6 +155,7 @@
                                             <th>작성 시간</th>
                                             <th>신고 카운트</th>
                                             <th>삭제</th>
+                                            <th>유저 차단</th>
                                         </tr>
                                     </thead>
                                     <tbody th:each="item : ${communityManagementList}">
@@ -167,10 +168,14 @@
                                         <td th:text="${item.reportCount}">Report Count</td>
                                         <td>
                                             <form id="deleteForm" th:action="@{'/community-management/' + ${item.communityId} + '/delete'}" method="post">
-                                            <button class="btn btn-danger btn-sm delete-button" onclick="confirmDelete()">Delete</button>
+                                            <button class="btn btn-danger btn-sm delete-button">Delete</button>
                                             </form>
                                         </td>
-
+                                        <td>
+                                            <form id="blockForm" th:action="@{'/community-management/' + ${item.nickname} + '/block'}" method="post">
+                                            <button class="btn btn-danger btn-sm delete-button">차단</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -240,6 +245,11 @@
     function confirmDelete() {
         if (confirm("정말 삭제하시겠습니까?")) {
             document.getElementById("deleteForm").submit();
+        }
+    }
+    function confirmBlock() {
+        if (confirm("정말 차단하시겠습니까?")) {
+            document.getElementById("blockForm").submit();
         }
     }
 </script>
