@@ -47,6 +47,8 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 <br>
 <br>
+<br>
+<br>
 
 ***
 
@@ -59,6 +61,8 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 <br>
 <br>
+<br>
+<br>
 
 ***
 
@@ -69,6 +73,8 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
   <img src="https://github.com/fxzz/application/assets/3148006/39719ce7-f85c-4f76-a8dc-1ca3347a399c" width="49%">
 </div>
 
+<br>
+<br>
 <br>
 <br>
 
