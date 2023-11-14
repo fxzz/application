@@ -48,6 +48,8 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 <br>
 <br>
 
+
+```
 **2. 커뮤니티 페이지**
 
 <div style="display: flex; justify-content: space-between;">
@@ -57,6 +59,7 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 <br>
 <br>
+```
 
 **3. 로그인 성공, 로그인 실패**
 
