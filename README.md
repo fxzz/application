@@ -47,7 +47,7 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 <br>
 <br>
-<div style="border-top: 1px solid black;"></div>
+---
 
 **2. 커뮤니티 페이지**
 
@@ -58,7 +58,7 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 <br>
 <br>
-<div style="border-top: 1px solid black;"></div>
+---
 
 **3. 로그인 성공, 로그인 실패**
 
@@ -69,7 +69,7 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 <br>
 <br>
-<div style="border-top: 1px solid black;"></div>
+---
 
 **4. 회원가입 실패**
 
