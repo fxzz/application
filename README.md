@@ -39,7 +39,7 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 ## 시연
 ## 1. 인기 게시글
 ```plaintext
-# 일주일 단위로 초기화 데이터 없으면 집계, 좋아요 순으로 정렬 1시간씩 순위 변동
+** 일주일 단위로 초기화 데이터 없으면 집계, 좋아요 순으로 정렬 1시간씩 순위 변동
 ```
   
 ![ezgif com-optimize](https://github.com/fxzz/application/assets/3148006/3d737026-bc48-48d3-b200-4592a3ade9de)
