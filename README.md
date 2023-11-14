@@ -109,4 +109,127 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
   <img src="https://github.com/fxzz/application/assets/3148006/a203ccb4-d9c8-45d4-b24d-96a3f15e8a5e" width="49%">
 </div>
 
+<br>
+<br>
+<br>
+<br>
+
+***
+
+**6. 게시글 읽기**
+```
+게시글 이동하고 이미지 다운로드, 수정, 삭제, 없는 페이지로 이동시 커뮤니티로 이동
+```
+
+![ezgif com-video-to-gif (1)](https://github.com/fxzz/StudyNotes/assets/3148006/d3225be3-eef5-4eb7-a1ca-e2c63e6caebd)
+
+<br>
+<br>
+<br>
+<br>
+
+***
+
+**7. 좋아요, 신고**
+```
+좋아요, 신고, 중복 검사
+```
+
+![ezgif com-video-to-gif](https://github.com/fxzz/StudyNotes/assets/3148006/32963730-ec27-4efd-82c2-d1628891961f)
+
+<br>
+<br>
+<br>
+<br>
+
+***
+
+**8. 댓글과 대댓글**
+```
+댓글과 대댓글, 삭제, 신고
+```
+
+![ezgif com-video-to-gif](https://github.com/fxzz/StudyNotes/assets/3148006/8b2b2e5b-ea36-4c0f-820a-c394eb5bc887)
+
+<br>
+<br>
+<br>
+<br>
+
+***
+
+
+**9. 알람**
+```
+내 게시글에 댓글이 달리면 인터셉터에 걸려있는 조건에 맞으면 아이콘 변경
+```
+
+![ezgif com-video-to-gif (1)](https://github.com/fxzz/StudyNotes/assets/3148006/4c248d8e-1d5c-4acb-92b0-2a925e5f207a)
+
+<br>
+<br>
+<br>
+<br>
+
+***
+
+**10. 프로필**
+```
+정보를 수정하는 프로필
+```
+
+![ezgif com-video-to-gif (2)](https://github.com/fxzz/StudyNotes/assets/3148006/145c528f-168b-4c3f-8af9-dccfb8e2a63f)
+
+<br>
+<br>
+<br>
+<br>
+
+***
+
+**11. 타임라인**
+```
+커서 페이징으로 빠르고 간단하게 사용자의 게시글을 조회
+```
+
+![ezgif com-video-to-gif (3)](https://github.com/fxzz/StudyNotes/assets/3148006/4119cd5e-ca93-409e-b90d-90eeb54851e5)
+
+<br>
+<br>
+<br>
+<br>
+
+***
+**12. 채팅**
+```
+웹소켓으로 구현한 간단한 채팅
+```
+
+![ezgif com-video-to-gif (4)](https://github.com/fxzz/StudyNotes/assets/3148006/a7f44e6d-24fe-41c0-a822-4808fd6e8d54)
+
+<br>
+<br>
+<br>
+<br>
+
+***
+**13. 실시간 계정 비활성화**
+```
+차단을 누르면 그 유저의 세션을 즉시 끊고 계정을 비활성화
+```
+![ezgif com-video-to-gif (5)](https://github.com/fxzz/StudyNotes/assets/3148006/d3d74734-2bcf-4f44-ac55-acba662aec35)
+
+<br>
+<br>
+<br>
+<br>
+
+***
+**14. 간단한 어드민 페이지**
+```
+통계랑 게시글 댓글 삭제 유저 차단
+```
+
+![ezgif com-video-to-gif (6)](https://github.com/fxzz/StudyNotes/assets/3148006/b4d2fdd8-89cd-47ee-8792-d4d6269c4d09)
+
 
