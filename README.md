@@ -92,3 +92,20 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 ![ezgif com-video-to-gif](https://github.com/fxzz/application/assets/3148006/13b15aba-ac1c-436c-a5ab-4c7959ed7fb2)
 
 
+<br>
+<br>
+<br>
+<br>
+
+***
+
+**4. 글쓰기 성공, 실패**
+```
+글쓰기에 태그 등록 이미지 등록이 포함, 유효성 검사
+```
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="https://github.com/fxzz/application/assets/3148006/95f2dd0c-279c-408a-945b-7f63ff22cec0" width="49%">
+  <img src="" width="49%">
+</div>
+
