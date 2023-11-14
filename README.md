@@ -50,5 +50,11 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 **2. 커뮤니티 페이지**
 
+<div class=pull-right>
+ㅇㅇ
+</div>
+<div class=pull-left>
 ![ezgif com-video-to-gif](https://github.com/fxzz/application/assets/3148006/6c37fd71-bf74-4cf2-926f-27faed52c322)
+</div>
+
 
