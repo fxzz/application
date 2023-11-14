@@ -62,7 +62,9 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 <div style="display: flex; justify-content: space-between;">
   <img src="https://github.com/fxzz/application/assets/3148006/a13ef6b4-a91c-4940-9aec-6a7c73291a9d" width="49%">
-  <img src="" width="49%">
+  <img src="https://github.com/fxzz/application/assets/3148006/39719ce7-f85c-4f76-a8dc-1ca3347a399c" width="49%">
 </div>
+
+
 
 
