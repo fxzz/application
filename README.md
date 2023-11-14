@@ -101,7 +101,7 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 **5. 글쓰기 성공, 실패**
 ```
-글쓰기에 태그 등록 이미지 등록이 포함, 유효성 검사
+글쓰기에 태그와 이미지 등록이 포함, 유효성 검사
 ```
 
 <div style="display: flex; justify-content: space-between;">
