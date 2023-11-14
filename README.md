@@ -52,7 +52,7 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 ***
 
-## 2. 커뮤니티 페이지
+**2. 커뮤니티 페이지**
 
 <div style="display: flex; justify-content: space-between;">
   <img src="https://github.com/fxzz/application/assets/3148006/4c942c02-f750-4c97-bef2-a75ee856c8d3" width="49%">
