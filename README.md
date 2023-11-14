@@ -55,6 +55,14 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
   <img src="https://github.com/fxzz/application/assets/3148006/6c37fd71-bf74-4cf2-926f-27faed52c322" width="49%">
 </div>
 
+<br>
+<br>
 
+**2. 로그인 성공, 로그인 실패**
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="https://github.com/fxzz/application/assets/3148006/a13ef6b4-a91c-4940-9aec-6a7c73291a9d" width="49%">
+  <img src="" width="49%">
+</div>
 
 
