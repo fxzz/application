@@ -152,7 +152,9 @@
         </div>
         <div id="communityId" th:text="${articleDto.communityId}" hidden></div>
 
-    <div  id="accountId" th:text="${account.accountId}" hidden ></div>
+        <div id="accountId" th:text="${account.accountId}"  hidden></div>
+        <div id="loggedInNickname" th:text="${#authentication.principal.account.nickname}" hidden></div>
+
     </div>
 </div>
 
@@ -237,6 +239,8 @@
 
 
     let toHtml = function (comments) {
+        var loggedInNickname = $('#loggedInNickname').text();
+
         let tmp = "<ul class=\"list-group-item border-bottom\">";
 
         comments.forEach(function (comment) {
@@ -268,7 +272,9 @@
             if (!comment.parentCommentId) {
                     tmp += '<a href="#Redirect" class="replyBtn"  style="text-decoration: none; font-size: 13px; color: black;">답글</a>';
                 }
-                tmp += ' <a href="#Redirect"  class="delBtn" style="text-decoration: none; font-size: 13px; color: black;">삭제</a>';
+            if (comment.nickname == loggedInNickname) {
+                tmp += ' <a  href="#Redirect"  class="delBtn" style="text-decoration: none; font-size: 13px; color: black;">삭제</a>';
+            }
                  tmp += ' <a href="#Redirect" class="repBtn" style="text-decoration: none; font-size: 13px; color: black;">신고</a>';
                 tmp += '<span class="commentId" data-comment-id="' + comment.commentId + '"></span>';
                 tmp += '</li>';
