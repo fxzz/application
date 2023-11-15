@@ -45,7 +45,7 @@
         SET title = #{title},
             content = #{content},
             modifiedAt = #{modifiedAt}
-        WHERE communityId = #{communityId}
+        WHERE communityId = #{communityId} AND accountId = #{accountId}
     </update>
 
     <update id="updateLikes" parameterType="Map">

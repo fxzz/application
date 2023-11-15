@@ -106,6 +106,7 @@ public class CommunityDto  {
         private String title;
         private String content;
         private LocalDateTime modifiedAt;
+        private Long accountId;
 
         public static ArticleModificationDto updateArticleModificationDto(ArticleModificationFormDto articleModificationFormDto) {
             return ArticleModificationDto.builder()
@@ -113,6 +114,7 @@ public class CommunityDto  {
                     .title(articleModificationFormDto.getTitle())
                     .content(articleModificationFormDto.getContent())
                     .modifiedAt(LocalDateTime.now())
+                    .accountId(articleModificationFormDto.getAccountId())
                     .build();
         }
     }

@@ -82,7 +82,7 @@
 
 
     <select id="selectArticleUpdateByCommunityId" parameterType="Long" resultType="com.example.application.community.dto.CommunityDto$ArticleModificationFormDto">
-        SELECT c.communityId, c.title ,c.accountId , c.content
+        SELECT c.communityId, c.title ,c.accountId , c.content, c.accountId
         FROM community c
         WHERE c.communityId = #{communityId}
     </select>
