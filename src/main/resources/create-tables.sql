@@ -116,5 +116,42 @@ CREATE TABLE login_failure (
    username VARCHAR(255) NOT NULL
 );
 
+
+
+
+
+
 ALTER table likes
 ADD column batch_status BOOLEAN DEFAULT FALSE
+
+CREATE TABLE coupon (
+coupon_id SERIAL PRIMARY KEY,
+coupon_code VARCHAR(255) NOT NULL,
+coupon_name VARCHAR(255) NOT NULL,
+quantity INT NOT NULL,
+expiration_date TIMESTAMP
+);
+
+COMMENT ON TABLE coupon IS '쿠폰';
+COMMENT ON COLUMN coupon.coupon_id IS '쿠폰 기본키(PK)';
+COMMENT ON COLUMN coupon.coupon_code IS '쿠폰 상수 코드';
+COMMENT ON COLUMN coupon.coupon_name IS '쿠폰 이름';
+COMMENT ON COLUMN coupon.quantity IS '쿠폰 수량';
+COMMENT ON COLUMN coupon.expiration_date IS '쿠폰 만료 날짜';
+
+
+
+CREATE TABLE coupon_usage (
+usage_id SERIAL PRIMARY KEY,
+coupon_id INT,
+user_id INT NOT NULL,
+used_date TIMESTAMP,
+is_used BOOLEAN DEFAULT FALSE
+);
+
+COMMENT ON TABLE coupon_usage IS '쿠폰 사용 정보';
+COMMENT ON COLUMN coupon_usage.usage_id IS '쿠폰 사용 기본키(PK)';
+COMMENT ON COLUMN coupon_usage.coupon_id IS '쿠폰 아이디(FK)';
+COMMENT ON COLUMN coupon_usage.user_id IS '사용자 아이디';
+COMMENT ON COLUMN coupon_usage.used_date IS '쿠폰 사용 날짜, 시간';
+COMMENT ON COLUMN coupon_usage.is_used IS '쿠폰 사용 여부';
