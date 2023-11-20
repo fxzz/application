@@ -18,11 +18,11 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 ## ⚙️ 개발 환경 및 기술 세부 스택
 - Java 11
 - Spring Boot 2.7.11
-- MyBatis
-- Thymeleaf
-- PostgreSQL
-- Redis
-- Spring Security
+- MyBatis 3.5.11
+- Thymeleaf 3.0
+- PostgreSQL 42.3.8
+- Redis - lettuce-core: 6.1.10
+- Spring Security 5.7.8
 
   
   
