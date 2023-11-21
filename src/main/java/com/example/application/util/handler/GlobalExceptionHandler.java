@@ -1,6 +1,7 @@
 package com.example.application.util.handler;
 
 import com.example.application.util.exception.CommunityIdValidationException;
+import com.example.application.util.exception.PasswordMismatchException;
 import com.example.application.util.exception.UnauthorizedAccessException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
 @ControllerAdvice
-public class CommunityExceptionHandler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(UnauthorizedAccessException.class)
     public String handleInvalidAccessOperationException(UnauthorizedAccessException ex, RedirectAttributes attributes) {
@@ -28,6 +29,19 @@ public class CommunityExceptionHandler {
     public String handleInvalidAccessOperationException(CommunityIdValidationException ex, RedirectAttributes attributes) {
         log.info("CommunityIdValidationException : {}", ex.getMessage());
         attributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/community";
+    }
+
+    @ExceptionHandler(PasswordMismatchException.class)
+    public String handlePasswordMismatchException(PasswordMismatchException ex, RedirectAttributes attributes) {
+        attributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/profile/password";
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public String handleInvalidRuntimeException(RuntimeException ex, RedirectAttributes attributes) {
+        log.info("handleInvalidRuntimeException : {}", ex.getMessage());
+        attributes.addFlashAttribute("error", "다시 시도해주세요.");
         return "redirect:/community";
     }
 }
