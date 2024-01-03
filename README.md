@@ -61,6 +61,17 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
   
 <br>
 
+| 채팅 | 
+| -------- |
+| ![ezgif com-video-to-gif-converter](https://github.com/fxzz/application/assets/3148006/c1afb5fc-3a0b-47cc-95b9-929cde823405) | 
+  
+<br>
+
+| 알림 | 
+| -------- |
+| ![ezgif com-video-to-gif-converter (1)](https://github.com/fxzz/application/assets/3148006/05e95dce-39aa-4c90-8eb8-f57f8e4d8344) | 
+  
+<br>
 
 ## 📄 엔티티 관계도
 ![postgres - application](https://github.com/fxzz/application/assets/3148006/20ff60d6-25bf-4923-b2e3-eb279e318ed8)
