@@ -39,6 +39,19 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
   
 <br>
 
+
+### [회원가입, 로그인]
+
+
+| 회원가입 실패 | 로그인 실패 | 
+| -------- | -------- | 
+| ![회원가입 실패](https://github.com/fxzz/application/assets/3148006/627ce42f-e80c-4a97-ac91-7b50f2d3685d) | ![로그인 실패](https://github.com/fxzz/application/assets/3148006/27ad2667-7310-4ee5-b388-6a4f6fe5c025) | 
+  
+<br>
+
+
+
+
 ## 📄 엔티티 관계도
 ![postgres - application](https://github.com/fxzz/application/assets/3148006/20ff60d6-25bf-4923-b2e3-eb279e318ed8)
 
@@ -51,7 +64,5 @@ fly.io 서버가 자동 슬립 모드로 설정되어 있습니다. 링크를 �
 
 
 
-
-![ezgif com-video-to-gif (6)](https://github.com/fxzz/StudyNotes/assets/3148006/b4d2fdd8-89cd-47ee-8792-d4d6269c4d09)
 
 
